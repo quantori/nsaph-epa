@@ -6,18 +6,17 @@
 Welcome to EPA Toolkit's documentation!
 =======================================
 
-.. automodule:: epa
-   :members:
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   usage
+   aqs
+   aqs_ds_def
+   aqs_tools
 
-Usage
-=====
 
-See :ref:`Usage`
+
 
 Indices and tables
 ==================

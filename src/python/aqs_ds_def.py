@@ -1,3 +1,8 @@
+"""
+Module contains classes to describe the context in which AQS data is downloaded
+"""
+
+
 from enum import IntEnum, Enum
 from internal.context import Context, Argument, Cardinality
 
@@ -29,14 +34,22 @@ class Aggregation(Enum):
 
 class AQSContext(Context):
     """
-    Utility to download EPA AQS Data hosted at https://www.epa.gov/aqs
+    This class is part of EPA AQS Toolkit. It allows user to define any
+    parameters that are used to select what data to download,
+    how to format it and where to place the results.
+
+    It is a concrete subclass of :class Context:
     """
 
     _years = Argument("years",
                      aliases=['y'],
                      cardinality=Cardinality.multiple,
                      default="1990:2020",
-                     help="Year or list of years to download"
+                     help="Year or list of years to download. For example, " +
+                        "the following argument: " +
+                        "`-y 1992:1995 1998 1999 2011 2015:2017` will produce " +
+                        "the following list: " +
+                        "[1992,1993,1994,1995,1998,1999,2011,2015,2016,2017]"
                      )
     _aggregation = Argument("aggregation",
                            aliases=['a'],
@@ -48,9 +61,10 @@ class AQSContext(Context):
     _parameters = Argument("parameters",
                           aliases=['p'],
                           cardinality=Cardinality.multiple,
-                          help="Parameter(s) to download, allowed values: " +
-                               ",".join(list(map(str, Parameter))) +
-                               " or integer codes. " +
+                          help="Parameter(s) to download, allowed mnemonic " +
+                               "names: " + ",".join(list(map(str, Parameter))) +
+                               " or integer codes. Example: `-p NO2 44201` " +
+                               "will download Ozone and NO2. " +
                                "Required for daily data, for annual data " +
                                "defaults to all."
                           )
@@ -64,15 +78,25 @@ class AQSContext(Context):
                            help="Concatenate consecutive years in one file"
                            )
 
-    def __init__(self):
+    def __init__(self, doc = None):
+        """
+        Constructor
+        :param doc: Optional argument, specifying what to print as documentation
+        """
         self.years = None
         self.parameters = None
         self.aggregation = None
         self.destination = None
         self.merge_years = None
-        super().__init__(AQSContext)
+        super().__init__(AQSContext, doc)
 
     def validate(self, attr, value):
+        """
+        AQS specific code to handle years and EPA Parameter Codes
+        :param attr:
+        :param value:
+        :return:
+        """
         value = super().validate(attr, value)
         if attr == "years":
             years = []

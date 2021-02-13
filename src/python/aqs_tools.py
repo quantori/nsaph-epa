@@ -1,13 +1,8 @@
 """
 Python module to download EPA AQS Data hosted at https://www.epa.gov/aqs
 
-The module can be used as a standalone tool or as a library of functions
+The module can be used as a library of functions
 to be called from other python scripts.
-
-If used as a tool, it expects user to specify a list of years,
-a list of EPA Parameter Codes
-https://www.epa.gov/aqs/aqs-code-list
-and some instructions how to format output
 
 The data is downloaded from https://aqs.epa.gov/aqsweb/airdata/download_files.html
 

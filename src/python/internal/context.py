@@ -1,14 +1,25 @@
+"""
+Utilities to create context and configuration objects
+"""
 import argparse
 from enum import Enum
 from typing import List
 
 
 class Cardinality(Enum):
+    """
+    Cardinality of a configuration parameter: multiple or singular
+    """
     single = "single"
     multiple = "multiple"
 
 
 class Argument:
+    """
+    A wrapper class to describe a command-line arguments
+    This is practically, a more rigid format for
+    :func ArgumentParser.add_argument:
+    """
     def __init__(self, name,
                  help: str,
                  type = str,
@@ -83,8 +94,25 @@ class Argument:
 
 
 class Context:
-    def __init__(self, subclass):
-        self.description = subclass.__doc__
+    """
+    Generic class allowing to build context and configuration objects
+    and initialize them using command line arguments
+    """
+
+    def __init__(self, subclass, description = None):
+        """
+        Creates a new object
+        :param subclass: A concrete class containing configuration information
+            Configuration options must be defined as class memebers with names,
+            starting with one '_' characters and values be instances of
+            :class Argument:
+        :param description: Optional text to use as description.
+            If not specified, then it is extracted from subclass documentation
+        """
+        if description:
+            self.description = description
+        else:
+            self.description = subclass.__doc__
         self._attrs = [
             attr[1:] for attr in subclass.__dict__
                 if attr[0] == '_' and attr[1] != '_'
@@ -104,6 +132,13 @@ class Context:
         ])
 
     def validate(self, attr, value):
+        """
+        Subclasses can override this method to implement custom handling
+        of command line arguments
+        :param attr: Command line argument name
+        :param value: Value returned by argparse
+        :return: value to use
+        """
         return value
 
     @classmethod
