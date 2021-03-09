@@ -12,7 +12,6 @@ import requests
 from dateutil.parser import parse
 from requests.models import Response
 
-
 class DownloadTask:
     def __init__(self, destination: str, urls: List = None, metadata = None):
         self.destination = destination
@@ -29,9 +28,10 @@ class DownloadTask:
         os.remove(self.destination)
 
     def __str__(self):
+        dest = os.path.abspath(self.destination)
         if len(self.urls) == 1:
-            return "[{]==> {}".format(self.urls[0], self.destination)
-        return "[{:d}]==> {}".format(len(self.urls), self.destination)
+            return "{} ==> {}".format(self.urls[0], dest)
+        return "[{:d}]==> {}".format(len(self.urls), dest)
 
     def is_up_to_date(self, is_transformed: bool = True):
         if len(self.urls) == 1 and not is_transformed:
@@ -95,6 +95,8 @@ def fopen(path: str, mode: str):
         return codecs.getreader("utf-8")(path)
     if path.lower().endswith(".gz"):
         return io.TextIOWrapper(gzip.open(path, mode))
+    if 'b' in mode:
+        return open(path, mode)
     return open(path, mode, encoding="utf-8")
 
 
