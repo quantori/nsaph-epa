@@ -4,7 +4,7 @@ Module contains classes to describe the context in which AQS data is downloaded
 
 
 from enum import IntEnum, Enum
-from internal.context import Context, Argument, Cardinality
+from nsaph_utils.utils.context import Context, Argument, Cardinality
 
 
 class Parameter(IntEnum):

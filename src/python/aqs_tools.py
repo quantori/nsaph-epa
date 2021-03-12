@@ -17,7 +17,7 @@ from typing import List, Dict
 import os
 
 from aqs_ds_def import AQSContext, Parameter, Aggregation
-from internal.io_utils import as_csv_reader, fopen, write_csv, \
+from nsaph_utils.utils.io_utils import as_csv_reader, fopen, write_csv, \
     DownloadTask
 
 BASE_AQS_EPA_URL = "https://aqs.epa.gov/aqsweb/airdata/"
