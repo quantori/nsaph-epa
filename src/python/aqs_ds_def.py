@@ -98,17 +98,6 @@ class AQSContext(Context):
         :return:
         """
         value = super().validate(attr, value)
-        if attr == "years":
-            years = []
-            for y in value:
-                if ':' in y:
-                    x = y.split(':')
-                    y1 = int(x[0])
-                    y2 = int(x[1])
-                    years += range(y1, y2 + 1)
-                else:
-                    years.append(int(y))
-            return sorted(years)
         if attr == "aggregation":
             return Aggregation(value)
         if attr == "parameters":
