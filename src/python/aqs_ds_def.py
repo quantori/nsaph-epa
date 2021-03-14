@@ -41,16 +41,6 @@ class AQSContext(Context):
     It is a concrete subclass of :class Context:
     """
 
-    _years = Argument("years",
-                     aliases=['y'],
-                     cardinality=Cardinality.multiple,
-                     default="1990:2020",
-                     help="Year or list of years to download. For example, " +
-                        "the following argument: " +
-                        "`-y 1992:1995 1998 1999 2011 2015:2017` will produce " +
-                        "the following list: " +
-                        "[1992,1993,1994,1995,1998,1999,2011,2015,2016,2017]"
-                     )
     _aggregation = Argument("aggregation",
                            aliases=['a'],
                            cardinality=Cardinality.single,
@@ -83,7 +73,6 @@ class AQSContext(Context):
         Constructor
         :param doc: Optional argument, specifying what to print as documentation
         """
-        self.years = None
         self.parameters = None
         self.aggregation = None
         self.destination = None
