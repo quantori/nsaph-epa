@@ -37,6 +37,6 @@ EPA AQS Data hosted at https://www.epa.gov/aqs
 
 # Detailed Documentation
 
-Hosted [Documentation](https://nsaph-sandbox01.rc.fas.harvard.edu/index.html) 
+Hosted [Documentation](https://nsaph-sandbox01.rc.fas.harvard.edu/aqs/index.html) 
 describes Python code and API
 
