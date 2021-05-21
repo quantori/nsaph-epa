@@ -1,7 +1,10 @@
+geopandas
 nsaph_utils >= 0.0.3
 numpy
 pandas
-requests
+pygeos
+pyshp
 PyYAML
+requests
 
 
