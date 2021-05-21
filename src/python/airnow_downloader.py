@@ -85,7 +85,7 @@ class AirNowDownloader:
         self.columns = None
 
     def download(self, requested_date):
-        is_json = self.options["format"] == self.format_json
+        is_json = ".json" in self.target
         options = dict(self.options)
         options["startdate"] = str(requested_date) + "t00"
         #options["enddate"] = str(requested_date + timedelta(days = 1)) + "t00"
@@ -119,7 +119,8 @@ class AirNowDownloader:
         row = rows[0]
         writer = csv.DictWriter(output, row.keys(), delimiter=',',
                                 quoting=csv.QUOTE_NONNUMERIC)
-        writer.writerow(rows)
+        writer.writeheader()
+        writer.writerows(rows)
 
     def process(self, content: str):
         df = pandas.read_json(content)
@@ -147,15 +148,18 @@ class AirNowDownloader:
         sites = df[[self.SITE, x, y]]
         sites = sites[sites[self.SITE].isin(new_monitors)]
         annotated = self.annotator.join(sites, x = x, y = y)
-        annotated.rename({"GEOID": "FIPS5"})
         for _, site in annotated.iterrows():
-            self.sites[site[self.SITE]] = {
+            row = {
                 key: site[key] if not (
                         isinstance(site[key], float) and math.isnan(site[key])
                 ) else None
                 for key in self.GIS_COLUMNS
             }
-            self.sites[site[self.SITE]][self.SITE] = site[self.SITE]
+            row[self.SITE] = site[self.SITE]
+            fips5 = row["GEOID"]
+            del row["GEOID"]
+            row["FIPS5"] = fips5
+            self.sites[site[self.SITE]] = row
         return
 
     def download_range(self, start_date, end_date = datetime.now().date()):
