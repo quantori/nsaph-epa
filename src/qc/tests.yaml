@@ -1,0 +1,13 @@
+-
+  name: Concentration is Positive
+  severity: error
+  condition: greater_than
+  variable: Value
+  val: 0
+
+-
+  name: AQI is Positive
+  severity: warning
+  condition: greater_than
+  variable: AQI
+  val: 0

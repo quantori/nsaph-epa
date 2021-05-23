@@ -1,3 +1,10 @@
+"""
+Python module to download EPA AirNow Data using WebServices API
+
+https://docs.airnowapi.org/webservices
+
+"""
+
 import csv
 import json
 import logging
@@ -5,17 +12,25 @@ import math
 import os
 import time
 from datetime import timedelta, datetime, date
+from pathlib import Path
+from typing import List, Any, Union
 
 import pandas
 import yaml
+from nsaph_utils.qc import Tester
 from nsaph_utils.utils.io_utils import fopen, as_content
 
 from airnow_gis import GISAnnotator
 
 
 class AirNowDownloader:
+    """
+    Main downloader class
+    """
+    
     SITE = "FullAQSCode"
     VALUE = "Value"
+    AQI = "AQI"
     GIS_COLUMNS = ["ZIP", "STATE", "GEOID"]
     bbox = "-140.58788,20.634217,-60.119132,60.453505"
 
@@ -61,7 +76,33 @@ class AirNowDownloader:
         raise Exception("AirNow API Key was not found")
 
     def __init__(self, target: str, parameter: str,
-                 api_key: str = None):
+                 api_key: str = None, qc = True):
+        """
+        Constructor.
+
+        :param target: File name, where downloaded data is saved.
+            If file name includes substring ".json", then the data is saved in
+            JSON format, otherwise it is saved as CSV. If target is not
+            specified (None), then teh data is not saved to file but is
+            returned to the caller. The latter mode is useful for testing.
+        :param parameter: Comma-separated list of parameters to download.
+            In practice because of AirNow API limitations, if more than
+            one parameter is specified, a runtime error will occur.
+            Possible values:
+                - Ozone (O3, ozone)
+                - PM2.5 (pm25)
+                - PM10 (pm10)
+                - CO (co)
+                - NO2 (no2)
+                - SO2 (so2)
+           
+        :param api_key: Optional API Key to use with AirNow api. If not
+            specified, then it is searched in a file named `.airnow.yaml`
+            or `.airnow.json` first in working directory and then in user's
+            home directory
+            
+        """
+
         self.options = dict()
         self.options["bbox"] = self.bbox
         self.options["format"] = self.format_json
@@ -78,58 +119,94 @@ class AirNowDownloader:
         self.annotator = GISAnnotator(shapes, self.GIS_COLUMNS)
         self.sites = dict()
         self.columns = None
+        self.qc = qc
 
     def reset(self):
         if os.path.exists(self.target):
             os.remove(self.target)
         self.columns = None
 
-    def download(self, requested_date):
+    def download(self, requested_date) -> Union[List[dict], str]:
+        """
+        Download data for a date
+
+        :param requested_date:  date to be downloaded
+        :return: If target has been specified, then this method returns
+            the target file name, otherwise it returns a list of dictionaries
+            where each dictionary is structured as JSON, with column names
+            serving as keys
+        """
+
         is_json = ".json" in self.target
         options = dict(self.options)
         options["startdate"] = str(requested_date) + "t00"
         #options["enddate"] = str(requested_date + timedelta(days = 1)) + "t00"
         options["enddate"] = str(requested_date) + "t23:59"
         logging.debug("Requesting AirNowAPI data... Date = " + str(requested_date))
+        attempts = 0
+        content = None
+        while True:
+            try:
+                content = as_content(self.url, params=options, mode='t')
+                break
+            except Exception as x:
+                attempts += 1
+                if attempts < self.max_attempts:
+                    logging.warning(str(x))
+                    time.sleep(self.time_to_sleep_between_attempts)
+                    continue
+                raise
+        rows = self.process(content)
+        if not rows:
+            raise Exception("Empty response for " + str(requested_date))
+        if self.target is None:
+            return rows
         with fopen(self.target, "at") as output:
-            attempts = 0
-            while True:
-                try:
-                    content = as_content(self.url, params=options, mode='t')
-                    break
-                except Exception as x:
-                    attempts += 1
-                    if attempts < self.max_attempts:
-                        logging.warning(str(x))
-                        time.sleep(self.time_to_sleep_between_attempts)
-                        continue
-                    raise
-            rows = self.process(content)
-            if not rows:
-                raise Exception("Empty response for " + str(requested_date))
             if is_json:
                 for row in rows:
                     json.dump(row, output)
                     output.write('\n')
             else:
                 self.dump_csv(output, rows)
+        return self.target
 
     @staticmethod
     def dump_csv(output, rows):
+        """
+        Internal method used by download
+        Dumps rows as CSV file
+
+        """
+
         row = rows[0]
         writer = csv.DictWriter(output, row.keys(), delimiter=',',
                                 quoting=csv.QUOTE_NONNUMERIC)
         writer.writeheader()
         writer.writerows(rows)
 
-    def process(self, content: str):
+    def process(self, content: str) -> List[dict]:
+        """
+        Internal method
+
+        Aggregates hourly data into day's averages and joins with geographic
+        information such as state, county, zip code.
+
+        :param content: Raw content received from AirNow API call
+            see: https://docs.airnowapi.org/Data/docs
+        :return: List of dictinaries, where each row is represented as a
+            dictionary, with column names serving as keys
+        """
+        
         df = pandas.read_json(content)
         agg = {
-            c: "mean" if c == self.VALUE else "first"
+            c: "mean" if c in [self.VALUE, self.AQI]
+                                else "first"
             for c in df.columns if c != self.SITE
         }
         aggregated = df.groupby(self.SITE).agg(agg).reset_index()
         self.check_sites(aggregated)
+        if self.qc:
+            self.do_qc(df)
         data = []
         for _, row in aggregated.iterrows():
             record = {column: row[column] for column in aggregated.columns}
@@ -137,6 +214,13 @@ class AirNowDownloader:
             record.update(self.sites[site])
             data.append(record)
         return data
+
+    def do_qc(self, df: pandas.DataFrame):
+        src = Path(__file__).parents[1]
+        qc = os.path.join(src, "qc", "tests.yaml")
+        tester = Tester("AirNow", qc)
+        tester.check(df)
+
 
     def check_sites(self, df: pandas.DataFrame):
         sites = df[self.SITE]
@@ -163,6 +247,16 @@ class AirNowDownloader:
         return
 
     def download_range(self, start_date, end_date = datetime.now().date()):
+        """
+        Downloads data for a range of dates. To invoke this method the
+        application must have specified a target file
+
+        :param start_date: First date in the range to download (inclusive)
+        :param end_date: Last date in the range to download (inclusive)
+        """
+
+        assert self.target, "Range downloading is only supported when target " \
+                            "file is specified "
         dt = start_date
         year = dt.year
         month = dt.month
