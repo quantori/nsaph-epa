@@ -9,8 +9,11 @@ AirNow conotains real-time up-to-date pollution data but is less reliable
 than AQS
 
 
-#Simple Usage
-##AQS
+Simple Usage
+------------
+
+AQS
+^^^
 
     python -u -m aqs [-h] 
         [--years [YEARS ...]] 
@@ -41,7 +44,8 @@ than AQS
       --merge_years         Concatenate consecutive years in one file, default:
                             False
                                
-##AirNow 
+AirNow
+^^^^^^
               
     python -u -m airnow [-h] --parameters {no2,ozone,pm25,pm10,co,so2}
            [{no2,ozone,pm25,pm10,co,so2} ...] --destination DESTINATION
