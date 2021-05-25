@@ -12,8 +12,7 @@ than AQS
 Simple Usage
 ------------
 
-AQS
-^^^
+### AQS
 
     python -u -m aqs [-h] 
         [--years [YEARS ...]] 
@@ -44,8 +43,7 @@ AQS
       --merge_years         Concatenate consecutive years in one file, default:
                             False
                                
-AirNow
-^^^^^^
+### AirNow 
               
     python -u -m airnow [-h] --parameters {no2,ozone,pm25,pm10,co,so2}
            [{no2,ozone,pm25,pm10,co,so2} ...] --destination DESTINATION
