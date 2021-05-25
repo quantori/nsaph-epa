@@ -13,6 +13,8 @@ Welcome to EPA Toolkit's documentation!
    usage
    aqs
    aqs_ds_def
+   airnow
+   airnow_ds_def
    aqs_tools
    airnow_downloader
 

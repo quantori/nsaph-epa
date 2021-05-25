@@ -93,6 +93,7 @@ class AQSContext(Context):
         self.merge_years = None
         '''Whether to concatenate consecutive years in one file'''
         super().__init__(AQSContext, doc)
+        self.instantiate()
 
     def validate(self, attr, value):
         """

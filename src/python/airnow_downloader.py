@@ -1,8 +1,5 @@
 """
-Python module to download EPA AirNow Data using WebServices API
-
-https://docs.airnowapi.org/webservices
-
+Toolkit and API for downloading AirNow
 """
 
 import csv

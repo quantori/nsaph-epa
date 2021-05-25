@@ -1,5 +1,5 @@
 geopandas
-nsaph_utils >= 0.0.3
+nsaph_utils >= 0.0.4.2
 numpy
 pandas
 pygeos
