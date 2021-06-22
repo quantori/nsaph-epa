@@ -72,6 +72,12 @@ class AirNowContext(Context):
                       default=True
     )
 
+    _qc = Argument("qc",
+                      help="Perform basic data QC",
+                      type=bool,
+                      default=True
+    )
+
     def __init__(self, doc = None):
         """
         Constructor
@@ -89,6 +95,8 @@ class AirNowContext(Context):
         '''Last date in the range to download (inclusive)'''
         self.reset = None
         '''Discard previously downloaded data if exists'''
+        self.qc = None
+        '''Perform basic data QC'''
         super().__init__(AirNowContext, doc)
         self.instantiate()
 

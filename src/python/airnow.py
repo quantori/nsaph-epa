@@ -3,10 +3,11 @@ Python module to download EPA AirNow Data using WebServices API
 
 https://docs.airnowapi.org/webservices
 
-AirNow conotains real-time up-to-date pollution data but is less reliable
+AirNow contains real-time up-to-date pollution data but is less reliable
 than AQS
 
 """
+import logging
 from datetime import datetime
 
 from airnow_downloader import AirNowDownloader
@@ -27,7 +28,8 @@ class AirNow:
         self.end = datetime.strptime(context.end_date, "%Y-%m-%d").date()
         self.downloader = AirNowDownloader(
             parameter=self.context.parameters,
-            target=context.destination
+            target=context.destination,
+            qc=context.qc
         )
 
     def download(self):
@@ -37,5 +39,6 @@ class AirNow:
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     downloader = AirNow()
     downloader.download()

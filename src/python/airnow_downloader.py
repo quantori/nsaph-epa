@@ -117,11 +117,39 @@ class AirNowDownloader:
         self.sites = dict()
         self.columns = None
         self.qc = qc
+        self.header_written = False
+        if parameter == "pm25":
+            self.t_int = [("00", "23:59")]
+        else:
+            self.t_int = [("00", "11:59"), ("12:00", "23:59")]
 
     def reset(self):
         if os.path.exists(self.target):
             os.remove(self.target)
         self.columns = None
+
+    def get_content(self, options):
+        attempts = 0
+        content = None
+        while True:
+            try:
+                content = as_content(self.url, params=options, mode='t')
+                break
+            except Exception as x:
+                attempts += 1
+                if attempts < self.max_attempts:
+                    logging.warning(str(x))
+                    time.sleep(self.time_to_sleep_between_attempts)
+                    continue
+                raise
+        return content
+
+    @staticmethod
+    def merge(contents: List[str]) -> str:
+        content = []
+        for c in contents:
+            content.extend(json.loads(c))
+        return json.dumps(content)
 
     def download(self, requested_date) -> Union[List[dict], str]:
         """
@@ -136,23 +164,16 @@ class AirNowDownloader:
 
         is_json = ".json" in self.target
         options = dict(self.options)
-        options["startdate"] = str(requested_date) + "t00"
-        #options["enddate"] = str(requested_date + timedelta(days = 1)) + "t00"
-        options["enddate"] = str(requested_date) + "t23:59"
-        logging.debug("Requesting AirNowAPI data... Date = " + str(requested_date))
-        attempts = 0
-        content = None
-        while True:
-            try:
-                content = as_content(self.url, params=options, mode='t')
-                break
-            except Exception as x:
-                attempts += 1
-                if attempts < self.max_attempts:
-                    logging.warning(str(x))
-                    time.sleep(self.time_to_sleep_between_attempts)
-                    continue
-                raise
+        contents = []
+        for interval in self.t_int:
+            options["startdate"] = str(requested_date) + 't' + interval[0]
+            options["enddate"] = str(requested_date) + 't' + interval[1]
+            logging.debug("Requesting AirNowAPI data... Date = " + str(requested_date))
+            contents.append(self.get_content(options))
+        if len(contents) > 1:
+            content = self.merge(contents)
+        else:
+            content = contents[0]
         rows = self.process(content)
         if not rows:
             raise Exception("Empty response for " + str(requested_date))
@@ -164,6 +185,9 @@ class AirNowDownloader:
                     json.dump(row, output)
                     output.write('\n')
             else:
+                if not self.header_written:
+                    self.write_csv_header(rows[0])
+                    self.header_written = True
                 self.dump_csv(output, rows)
         return self.target
 
@@ -178,8 +202,19 @@ class AirNowDownloader:
         row = rows[0]
         writer = csv.DictWriter(output, row.keys(), delimiter=',',
                                 quoting=csv.QUOTE_NONNUMERIC)
-        writer.writeheader()
         writer.writerows(rows)
+
+    def write_csv_header(self, row):
+        """
+        Internal method used by download
+        Writes CSV file ehader
+
+        """
+
+        with fopen(self.target, "wt") as output:
+            writer = csv.DictWriter(output, row.keys(), delimiter=',',
+                                    quoting=csv.QUOTE_NONNUMERIC)
+            writer.writeheader()
 
     def process(self, content: str) -> List[dict]:
         """
