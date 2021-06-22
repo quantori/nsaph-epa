@@ -20,12 +20,14 @@ class AQS:
     """
     Main class, describes the whole download job
     """
+    
     def __init__(self, context: AQSContext = None):
         """
         Creates a new instance
         :param context: An optional AQSContext object, if not specified,
-            then it is constructed from the command line arguments
+        then it is constructed from the command line arguments
         """
+        
         if not context:
             context = AQSContext(__doc__)
         self.context = context
@@ -35,16 +37,20 @@ class AQS:
         """
         Constructs a list of all download tasks necessary to execute to
         download all the data defined in the configuration ()
+        
         :return: Nothing
         """
+
         self.download_tasks = collect_aqs_download_tasks(self.context)
 
     def is_downloaded(self):
         """
         Checks if there anything remains to be downloaded or if all
         files are up to date
+
         :return: True if everything is up to date, False otherwise
         """
+
         if not self.download_tasks:
             self.collect_downloads()
         for task in self.download_tasks:
@@ -57,6 +63,7 @@ class AQS:
         Removes all previously downloaded data from the local storage
         :return: Nothing
         """
+        
         if not self.download_tasks:
             self.collect_downloads()
         for task in self.download_tasks:

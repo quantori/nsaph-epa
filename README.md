@@ -1,12 +1,20 @@
 Toolkit for downloading and preprocessing of data provided by EPA
 =================================================================
 
-Currently, contains Python module to download 
-EPA AQS Data hosted at https://www.epa.gov/aqs
+Python module to download 
+EPA AQS Data hosted at https://www.epa.gov/aqs and EPA AirNow data
+from https://docs.airnowapi.org/webservices 
 
-#Simple Usage
+AirNow conotains real-time up-to-date pollution data but is less reliable
+than AQS
 
-    python -m aqs [-h] 
+
+Simple Usage
+------------
+
+### AQS
+
+    python -u -m aqs [-h] 
         [--years [YEARS ...]] 
         [--aggregation {annual,daily}] 
         --parameters PARAMETERS [PARAMETERS ...] 
@@ -34,9 +42,31 @@ EPA AQS Data hosted at https://www.epa.gov/aqs
                             Destination directory for the downloaded files
       --merge_years         Concatenate consecutive years in one file, default:
                             False
+                               
+### AirNow 
+              
+    python -u -m airnow [-h] --parameters {no2,ozone,pm25,pm10,co,so2}
+           [{no2,ozone,pm25,pm10,co,so2} ...] --destination DESTINATION
+           --start_date START_DATE --end_date END_DATE [--reset]
+           [--years [YEARS [YEARS ...]]] [--compress]
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      --parameters {no2,ozone,pm25,pm10,co,so2} [{no2,ozone,pm25,pm10,co,so2} 
+            ...], -p {no2,ozone,pm25,pm10,co,so2} [{no2,ozone,pm25,pm10,co,so2} ...]
+                            EPA AirNow Parameter Codes
+      --destination DESTINATION, --dest DESTINATION, -d DESTINATION
+                            Destination directory for the downloaded files
+      --start_date START_DATE, --start-date START_DATE, --from START_DATE
+                            First date in the range to download (inclusive)
+      --end_date END_DATE, --end-date END_DATE, --to END_DATE
+                            Last date in the range to download (inclusive)
+      --reset               Discard previously downloaded data if exists, default:
+                            True
+      --compress, -c        Use gzip compression for the result, default: True
 
 # Detailed Documentation
 
-Hosted [Documentation](https://nsaph-sandbox01.rc.fas.harvard.edu/index.html) 
+Hosted [Documentation](https://nsaph-sandbox01.rc.fas.harvard.edu/aqs/index.html) 
 describes Python code and API
 
