@@ -5,7 +5,7 @@ Python module to download
 EPA AQS Data hosted at https://www.epa.gov/aqs and EPA AirNow data
 from https://docs.airnowapi.org/webservices 
 
-AirNow conotains real-time up-to-date pollution data but is less reliable
+AirNow contains real-time up-to-date pollution data but is less reliable
 than AQS
 
 

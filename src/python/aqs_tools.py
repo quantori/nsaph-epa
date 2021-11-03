@@ -13,6 +13,7 @@ Probably the only method useful to external user is :func:`download_aqs_data`
 """
 
 import csv
+import datetime
 from typing import List, Dict
 import os
 
@@ -70,7 +71,14 @@ def add_monitor_key(row: Dict):
     row[MONITOR] = monitor
     global record_index
     record_index += 1
-    r = RECORD_NUM_FORMAT.format(int(row["Year"]), record_index)
+    if "Year" in row:
+        year = int(row["Year"])
+    elif "Date Local" in row:
+        dt = datetime.date.fromisoformat(row["Date Local"])
+        year = dt.year
+    else:
+        raise ValueError("No information about year")
+    r = RECORD_NUM_FORMAT.format(year, record_index)
     row[RECORD] = r
 
 
