@@ -11,9 +11,11 @@ https://aqs.epa.gov/aqsweb/airdata/download_files.html
 The tool also adds a column containing a uniquely generated Monitor Key
 
 """
+import os
 
-from aqs_ds_def import AQSContext
-from aqs_tools import collect_aqs_download_tasks, download_data
+from epa.aqs_ds_def import AQSContext
+from epa.aqs_tools import collect_aqs_download_tasks, download_data
+from nsaph import init_logging
 
 
 class AQS:
@@ -27,10 +29,13 @@ class AQS:
         :param context: An optional AQSContext object, if not specified,
         then it is constructed from the command line arguments
         """
-        
+
+        init_logging()
         if not context:
             context = AQSContext(__doc__)
         self.context = context
+        if self.context.destination is None:
+            self.context.destination = os.curdir
         self.download_tasks = None
 
     def collect_downloads(self):

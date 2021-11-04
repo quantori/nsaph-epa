@@ -17,7 +17,7 @@ import datetime
 from typing import List, Dict
 import os
 
-from aqs_ds_def import AQSContext, Parameter, Aggregation
+from epa.aqs_ds_def import AQSContext, Parameter, Aggregation
 from nsaph_utils.utils.io_utils import as_csv_reader, fopen, write_csv, \
     DownloadTask
 

@@ -10,8 +10,8 @@ than AQS
 import logging
 from datetime import datetime
 
-from airnow_downloader import AirNowDownloader
-from airnow_ds_def import AirNowContext
+from epa.airnow_downloader import AirNowDownloader
+from epa.airnow_ds_def import AirNowContext
 
 
 class AirNow:
