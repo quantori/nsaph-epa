@@ -46,7 +46,8 @@ class AirNowContext(Context):
     _parameters = Argument("parameters",
                           aliases=['p'],
                           cardinality=Cardinality.multiple,
-                          valid_values=[a.value for a in Parameter],
+                          valid_values=[a.value.lower() for a in Parameter]
+                           + [a.value.upper() for a in Parameter],
                           help="EPA AirNow Parameter Codes",
                           required=True
     )
@@ -54,7 +55,7 @@ class AirNowContext(Context):
         aliases=['dest', 'd'],
         cardinality=Cardinality.single,
         help="Destination directory for the downloaded files",
-        required=True
+        required=False
     )
     _start_date = Argument("start_date",
         aliases=["start-date", "from"],
@@ -77,6 +78,14 @@ class AirNowContext(Context):
                       type=bool,
                       default=True
     )
+    _cfg = Argument("cfg",
+                    help = "An optional path to config file",
+                    required=False
+    )
+    _shape_dir = Argument("shape_dir",
+                    help = "An optional path to shapes directory, unused",
+                    required=False
+    )
 
     def __init__(self, doc = None):
         """
@@ -97,8 +106,18 @@ class AirNowContext(Context):
         '''Discard previously downloaded data if exists'''
         self.qc = None
         '''Perform basic data QC'''
+        self.cfg = None
+        ''' Optional path to config file '''
+        self.shape_dir = None
         super().__init__(AirNowContext, doc)
         self.instantiate()
+
+    def validate(self, attr, value):
+        if attr == "parameters" and value is not None:
+            value = [v.lower() for v in value]
+        return super().validate(attr, value)
+
+
 
 
 

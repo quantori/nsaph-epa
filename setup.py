@@ -6,7 +6,7 @@ with open("README.md", "r") as readme:
 
 setup(
     name='epa',
-    version="0.0.1.0",
+    version="0.0.1.1",
     url='https://gitlab-int.rc.fas.harvard.edu/rse/francesca_dominici/tools/epa',
     license='',
     author='Michael Bouzinier',
@@ -24,6 +24,16 @@ setup(
         "License :: Harvard University :: Development",
         "Operating System :: OS Independent"],
     install_requires=[
+        'fiona',
+        'geopandas',
+        'numpy',
+        'pandas',
+        'pygeos==0.10',
+        'pyshp',
+        'PyYAML',
+        'requests',
+        'PyYAML',
+        'nsaph_utils >= 0.0.4.2',
         'nsaph>=0.0.2.0'
     ],
     package_data = {

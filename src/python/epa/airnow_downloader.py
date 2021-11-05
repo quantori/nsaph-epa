@@ -17,7 +17,7 @@ import yaml
 from nsaph_utils.qc import Tester
 from nsaph_utils.utils.io_utils import fopen, as_content
 
-from airnow_gis import GISAnnotator
+from epa.airnow_gis import GISAnnotator
 
 
 class AirNowDownloader:
