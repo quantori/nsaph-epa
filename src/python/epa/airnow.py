@@ -30,19 +30,13 @@ class AirNow:
         self.context = context
         if self.context.destination is None:
             self.context.destination = os.curdir
-        if self.context.cfg and self.context.cfg != ".airnow.yaml":
-            os.system("cp {} .airnow.yaml".format(self.context.cfg))
-        if self.context.shape_dir:
-            if not os.path.isdir(self.context.shape_dir):
-                raise ValueError(self.context.shape_dir)
+        if self.context.shapes:
+            for f in self.context.shapes:
+                if not os.path.isfile(f):
+                    raise ValueError(f)
         self.start = datetime.strptime(context.start_date, "%Y-%m-%d").date()
         self.end = datetime.strptime(context.end_date, "%Y-%m-%d").date()
-        self.downloader = AirNowDownloader(
-            parameter=self.context.parameters,
-            target=context.destination,
-            qc=context.qc
-        )
-
+        self.downloader = AirNowDownloader(context=self.context)
     def download(self):
         if self.context.reset:
             self.downloader.reset()

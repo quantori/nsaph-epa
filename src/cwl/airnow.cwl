@@ -45,6 +45,7 @@ steps:
   download:
     run: download_airnow.cwl
     in:
+      api-key: api-key
       cfg: setup/cfg
       shapes: setup/shapes
       from: from
@@ -61,10 +62,16 @@ outputs:
   cfg:
     type: File
     outputSource: setup/cfg
-  shapes:
-    type: Directory
-    outputSource: setup/shapes
+#  shape_dir:
+#    type: Directory
+#    outputSource: setup/shape_dir
+#  shapes:
+#    type: File[]
+#    outputSource: setup/shapes
   download_log:
     type: File
     outputSource: download/log
+  download_data:
+    type: File
+    outputSource: download/data
 

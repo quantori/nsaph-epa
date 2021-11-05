@@ -17,6 +17,7 @@ import yaml
 from nsaph_utils.qc import Tester
 from nsaph_utils.utils.io_utils import fopen, as_content
 
+from epa.airnow_ds_def import AirNowContext
 from epa.airnow_gis import GISAnnotator
 
 
@@ -72,8 +73,12 @@ class AirNowDownloader:
             return key
         raise Exception("AirNow API Key was not found")
 
-    def __init__(self, target: str, parameter: str,
-                 api_key: str = None, qc = True):
+    def __init__(self,
+                 target: str = None,
+                 parameter: str = None,
+                 api_key: str = None,
+                 qc = None,
+                 context: AirNowContext = None):
         """
         Constructor.
 
@@ -105,12 +110,23 @@ class AirNowDownloader:
         self.options["format"] = self.format_json
         self.options["datatype"] = self.datatype
         self.options["verbose"] = self.verbose
-        self.options["parameters"] = parameter
-        self.target = target
+        if parameter is not None:
+            self.options["parameters"] = parameter
+        else:
+            self.options["parameters"] = context.parameters
+        if target is not None:
+            self.target = target
+        else:
+            self.target = context.destination
+        if api_key is None:
+            api_key = context.api_key
         if api_key is None:
             api_key = self.look_for_api_key()
         self.options["api_key"] = api_key
-        shapes = self.get_config("shapes")
+        if context.shapes:
+            shapes = context.shapes
+        else:
+            shapes = self.get_config("shapes")
         if not shapes:
             raise Exception("Shape files are not specified")
         self.annotator = GISAnnotator(shapes, self.GIS_COLUMNS)

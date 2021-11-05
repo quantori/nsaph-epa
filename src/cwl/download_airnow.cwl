@@ -30,12 +30,26 @@ inputs:
     inputBinding:
       prefix: --cfg
   shapes:
-    type: Directory
+    type: File[]
     inputBinding:
-      prefix: --shape_dir
+      prefix: --shapes
+    secondaryFiles:
+      - ".xml"
+      - ".iso.xml"
+      - ".ea.iso.xml"
+      - "^.dbf"
+      - "^.sbx"
+      - "^.shx"
+      - "^.sbn"
+      - "^.prj"
+      - "^.cpg"
   table:
     type: string
     doc: the name of the table to be created
+  api-key:
+    type: string?
+    inputBinding:
+      prefix: --api_key
 
 
 arguments:
@@ -52,7 +66,7 @@ outputs:
   data:
     type: File
     outputBinding:
-      glob: "*.csv*"
+      glob: "*.json*"
 
 
 

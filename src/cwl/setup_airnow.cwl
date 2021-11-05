@@ -4,6 +4,8 @@
 cwlVersion: v1.2
 class: CommandLineTool
 baseCommand: [python, -m, epa.airnow_setup]
+requirements:
+  InlineJavascriptRequirement: {}
 
 doc: |
   This tool prepares environemnt for AirNow download
@@ -15,16 +17,39 @@ inputs:
     type: string
     inputBinding:
       position: 1
+  shape_dir:
+    type: Directory?
+    inputBinding:
+      position: 2
+  cfg:
+    type: File?
+    inputBinding:
+      position: 3
+
 
 outputs:
   cfg:
     type: File
     outputBinding:
       glob: ".airnow.yaml"
+#  shape_dir:
+#    type: Directory
+#    outputBinding:
+#      glob: "shapes"
   shapes:
-    type: Directory
+    type: File[]
     outputBinding:
-      glob: "shapes"
+      glob: "shapes/*.shp"
+    secondaryFiles:
+      - ".xml"
+      - ".iso.xml"
+      - ".ea.iso.xml"
+      - "^.dbf"
+      - "^.sbx"
+      - "^.shx"
+      - "^.sbn"
+      - "^.prj"
+      - "^.cpg"
   log:
     type: stdout
 

@@ -82,9 +82,14 @@ class AirNowContext(Context):
                     help = "An optional path to config file",
                     required=False
     )
-    _shape_dir = Argument("shape_dir",
-                    help = "An optional path to shapes directory, unused",
+    _shapes = Argument("shapes",
+                    help = "An optional path to shape files",
+                    cardinality= Cardinality.multiple,
                     required=False
+    )
+    _api_key = Argument("api_key",
+                        help = "AirNow API Key",
+                        required=False
     )
 
     def __init__(self, doc = None):
@@ -108,7 +113,10 @@ class AirNowContext(Context):
         '''Perform basic data QC'''
         self.cfg = None
         ''' Optional path to config file '''
-        self.shape_dir = None
+        self.shapes = None
+        ''' Optional path to shapes directory '''
+        self.api_key = None
+        ''' AirNow API Key '''
         super().__init__(AirNowContext, doc)
         self.instantiate()
 
