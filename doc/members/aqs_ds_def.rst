@@ -1,6 +1,6 @@
-Configuration Object for EPA AQS Package
-========================================
-.. automodule:: aqs_ds_def
+Configuration Options for EPA AQS Package
+=========================================
+.. automodule:: epa.aqs_ds_def
    :members:
    :inherited-members: years, compress
 

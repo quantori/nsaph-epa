@@ -54,6 +54,39 @@ steps:
       parameter_code: parameter_code
     out: [log, data]
 
+  introspect:
+    run: introspect.cwl
+    in:
+      depends_on: download/log
+      input: download/data
+      table: table
+      output:
+        valueFrom: epa.yaml
+    out: [log, model]
+
+  ingest:
+    run: ingest.cwl
+    doc: Uploads data into the database
+    in:
+      registry: introspect/model
+      table: table
+      input: download/data
+      database: database
+      connection_name: connection_name
+    out: [log]
+
+  index:
+    run: index.cwl
+    in:
+      depends_on: ingest/log
+      registry: introspect/model
+      domain:
+        valueFrom: "epa"
+      table: table
+      database: database
+      connection_name: connection_name
+    out: [log]
+
 
 outputs:
   setup_log:
@@ -71,7 +104,16 @@ outputs:
   download_log:
     type: File
     outputSource: download/log
+  ingest_log:
+    type: File
+    outputSource: ingest/log
+  index_log:
+    type: File
+    outputSource: index/log
   download_data:
     type: File
     outputSource: download/data
+  model:
+    type: File
+    outputSource: introspect/model
 

@@ -12,8 +12,7 @@ from nsaph import init_logging
 from nsaph.loader.introspector import Introspector
 from nsaph_utils.utils.context import Context, Argument, Cardinality
 
-from epa.aqs_tools import RECORD
-
+from epa import RECORD
 
 DOMAIN_NAME = "epa"
 

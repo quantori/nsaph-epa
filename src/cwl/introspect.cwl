@@ -19,7 +19,6 @@ inputs:
       A path the downloaded data file
   output:
     type: string
-    default: "epa.yaml"
     doc: A path to a file name with EPA data model
     inputBinding:
       prefix: --output

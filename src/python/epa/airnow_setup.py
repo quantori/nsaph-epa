@@ -1,3 +1,9 @@
+"""
+Prepares workspace for AirNow pipeline
+
+In particular, installs zip code and county shape files
+"""
+
 from typing import List
 import sys
 import os
