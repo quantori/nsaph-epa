@@ -30,7 +30,6 @@ setup(
         'pandas',
         'pygeos==0.10',
         'pyshp',
-        'PyYAML',
         'requests',
         'PyYAML',
         'nsaph_utils >= 0.0.4.2',
