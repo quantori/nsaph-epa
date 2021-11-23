@@ -34,7 +34,7 @@ inputs:
       or symbolic name (e.g. PM25, NO2).
       See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list)
   table:
-    doc: Name of the table to be created in teh database
+    doc: Name of the table to be created in the database
     type: string
 
 steps:
