@@ -18,6 +18,7 @@ inputs:
   proxy:
     type: string?
     default: ""
+    doc: HTTP/HTTPS Proxy if required
   database:
     type: File
     doc: Path to database connection file, usually database.ini
@@ -28,7 +29,12 @@ inputs:
     type: string
   parameter_code:
     type: string
+    doc: |
+      Parameter code. Either a numeric code (e.g. 88101, 44201)
+      or symbolic name (e.g. PM25, NO2).
+      See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list)
   table:
+    doc: Name of the table to be created in teh database
     type: string
 
 steps:
