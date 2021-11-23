@@ -64,6 +64,7 @@ steps:
     in:
       aggregation: aggregation
       parameter_code: parameter_code
+      proxy: proxy
     out: [log, data]
 
   introspect:
