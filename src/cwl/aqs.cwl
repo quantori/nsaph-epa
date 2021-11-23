@@ -15,6 +15,9 @@ doc: |
   and ingests the data into the database
 
 inputs:
+  proxy:
+    type: string?
+    default: ""
   database:
     type: File
     doc: Path to database connection file, usually database.ini
