@@ -69,4 +69,8 @@ outputs:
     type: File
     outputBinding:
       glob: "*.log"
+  errors:
+    type: stderr
+
+stderr: ingest.err
 

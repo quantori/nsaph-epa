@@ -43,13 +43,17 @@ arguments:
 
 outputs:
   log:
-    type: File
+    type: File?
     outputBinding:
       glob: "*.log"
   data:
-    type: File
+    type: File?
     outputBinding:
       glob: "*.csv*"
+  errors:
+    type: stderr
+
+stderr: download.err
 
 
 
