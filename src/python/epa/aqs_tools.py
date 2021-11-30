@@ -13,6 +13,7 @@ Probably the only method useful to external user is :func:`download_aqs_data`
 """
 
 import csv
+import logging
 from typing import List, Dict
 import os
 
@@ -95,7 +96,17 @@ def download_data(task: DownloadTask):
     for url in task.urls:
         print("{} => {}".format(url, target))
         with fopen(target, "at") as ostream:
-            reader = as_csv_reader(url)
+            attempt = 0
+            while True:
+                try:
+                    reader = as_csv_reader(url)
+                    break
+                except Exception:
+                    attempt += 1
+                    if attempt > 3:
+                        raise
+                    logging.exception("Attempt {:d}: Error downloading {}".
+                                      format(attempt, url))
             fieldnames = list(reader.fieldnames)
             fieldnames.append(MONITOR)
             fieldnames.append(RECORD)
