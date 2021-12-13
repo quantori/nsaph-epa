@@ -31,3 +31,4 @@ EPA data and generates a table defintion
 |------|------|-------------|
 |log|File| |
 |model|File| |
+|errors|stderr| |

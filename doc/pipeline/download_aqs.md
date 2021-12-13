@@ -19,8 +19,9 @@ This tool downloads AQS data from EPA website
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-|aggregation|string| | |
-|parameter_code|string| | |
+|proxy|string|``|HTTP/HTTPS Proxy if required|
+|aggregation|string| |Aggregation type: annual or daily|
+|parameter_code|string| |Parameter code. Either a numeric code (e.g. 88101, 44201) or symbolic name (e.g. PM25, NO2). See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list) |
 
 ## Outputs
 
@@ -28,3 +29,4 @@ This tool downloads AQS data from EPA website
 |------|------|-------------|
 |log|File| |
 |data|File| |
+|errors|stderr| |

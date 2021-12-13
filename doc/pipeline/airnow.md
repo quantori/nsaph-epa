@@ -22,13 +22,14 @@ and ingests the data into the database
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-|api-key|string| | |
+|proxy|string|``|HTTP/HTTPS Proxy if required|
+|api-key|string| |API key for AirNow|
 |database|File| |Path to database connection file, usually database.ini|
 |connection_name|string| |The name of the section in the database.ini file|
-|from|string| | |
-|to|string| | |
-|parameter_code|string| | |
-|table|string| | |
+|from|string| |Start date for downolading, in YYYY-MM-DD format|
+|to|string| |End date for downolading, in YYYY-MM-DD format|
+|parameter_code|string| |Parameter code. Either a numeric code (e.g. 88101, 44201) or symbolic name (e.g. PM25, NO2). See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list) |
+|table|string| |Name of the table to be created in the database|
 
 ## Outputs
 

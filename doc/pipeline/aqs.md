@@ -22,11 +22,12 @@ and ingests the data into the database
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
+|proxy|string|``|HTTP/HTTPS Proxy if required|
 |database|File| |Path to database connection file, usually database.ini|
 |connection_name|string| |The name of the section in the database.ini file|
 |aggregation|string| | |
-|parameter_code|string| | |
-|table|string| | |
+|parameter_code|string| |Parameter code. Either a numeric code (e.g. 88101, 44201) or symbolic name (e.g. PM25, NO2). See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list) |
+|table|string| |Name of the table to be created in the database|
 
 ## Outputs
 
@@ -40,6 +41,9 @@ and ingests the data into the database
 |index_log|File| |
 |data|File| |
 |model|File| |
+|download_err|File| |
+|introspect_err|File| |
+|ingest_err|File| |
 
 ## Steps
 

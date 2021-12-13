@@ -19,9 +19,10 @@ This tool downloads AirNow data from EPA website
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-|parameter_code|string| | |
-|from|string| | |
-|to|string| | |
+|proxy|string|``|HTTP/HTTPS Proxy if required|
+|parameter_code|string| |Parameter code. Either a numeric code (e.g. 88101, 44201) or symbolic name (e.g. PM25, NO2). See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list) |
+|from|string| |Start date for downolading, in YYYY-MM-DD format|
+|to|string| |End date for downolading, in YYYY-MM-DD format|
 |cfg|File| | |
 |shapes|File[]| | |
 |table|string| |the name of the table to be created|

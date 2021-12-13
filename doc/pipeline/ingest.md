@@ -35,3 +35,4 @@ This tool uploads the data to the database
 | Name | Type | Description |
 |------|------|-------------|
 |log|File| |
+|errors|stderr| |
