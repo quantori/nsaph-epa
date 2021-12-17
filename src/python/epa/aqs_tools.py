@@ -13,26 +13,20 @@ Probably the only method useful to external user is :func:`download_aqs_data`
 """
 
 import csv
+import logging
 from typing import List, Dict
 import os
 
-from aqs_ds_def import AQSContext, Parameter, Aggregation
+from epa import STATE_CODE, COUNTY_CODE, \
+    SITE_NUM, PARAMETER_CODE, MONITOR, RECORD, add_record_num
+from epa.aqs_ds_def import AQSContext, Parameter, Aggregation
 from nsaph_utils.utils.io_utils import as_csv_reader, fopen, write_csv, \
     DownloadTask
 
 BASE_AQS_EPA_URL = "https://aqs.epa.gov/aqsweb/airdata/"
 ANNUAL_URI = "annual_conc_by_monitor_{year}.zip"
 DAILY_URI = "daily_{parameter}_{year}.zip"
-
 MONITOR_FORMAT = "{state}{county:03d}-{site:04d}"
-RECORD_NUM_FORMAT = "{:d}-{:d}"
-
-STATE_CODE = "State Code"
-COUNTY_CODE = "County Code"
-SITE_NUM = "Site Num"
-PARAMETER_CODE = "Parameter Code"
-MONITOR = "Monitor"
-RECORD = "Record"
 
 
 def transfer(reader: csv.DictReader, writer: csv.DictWriter, flt=None,
@@ -51,11 +45,18 @@ def transfer(reader: csv.DictReader, writer: csv.DictWriter, flt=None,
     :param header: whether to first write header row
     :return: Nothing
     """
-    write_csv(reader, writer, transformer=add_monitor_key, filter=flt,
+    write_csv(reader, writer, transformer=add_more_columns, filter=flt,
               write_header=header)
 
 
+def add_more_columns(row: Dict):
+    add_monitor_key(row)
+    add_record_key(row)
+
+
 record_index = 0
+
+
 def add_monitor_key(row: Dict):
     """
     Internal method to generate and add unique Monitor Key
@@ -68,10 +69,12 @@ def add_monitor_key(row: Dict):
                                     county = int(row[COUNTY_CODE]),
                                     site = int(row[SITE_NUM]))
     row[MONITOR] = monitor
+
+
+def add_record_key(row: Dict):
     global record_index
     record_index += 1
-    r = RECORD_NUM_FORMAT.format(int(row["Year"]), record_index)
-    row[RECORD] = r
+    add_record_num(row, record_index)
 
 
 def download_data(task: DownloadTask):
@@ -93,7 +96,17 @@ def download_data(task: DownloadTask):
     for url in task.urls:
         print("{} => {}".format(url, target))
         with fopen(target, "at") as ostream:
-            reader = as_csv_reader(url)
+            attempt = 0
+            while True:
+                try:
+                    reader = as_csv_reader(url)
+                    break
+                except Exception:
+                    attempt += 1
+                    if attempt > 3:
+                        raise
+                    logging.exception("Attempt {:d}: Error downloading {}".
+                                      format(attempt, url))
             fieldnames = list(reader.fieldnames)
             fieldnames.append(MONITOR)
             fieldnames.append(RECORD)

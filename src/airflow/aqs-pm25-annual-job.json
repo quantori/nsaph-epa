@@ -1,0 +1,13 @@
+{
+    "job": {
+      "database": {
+         "class": "File",
+         "location": "/opt/airflow/project/database.ini"
+      },
+      "connection_name": "nsaph2",
+      "aggregation": "annual",
+      "parameter_code": "PM25",
+      "table": "pm25_annual",
+      "proxy": "http://rcproxy.rc.fas.harvard.edu:3128"
+    }
+ }

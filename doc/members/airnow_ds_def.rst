@@ -1,6 +1,6 @@
-Configuration Object for EPA AirNow Package
-===========================================
-.. automodule:: airnow_ds_def
+Configuration Options for EPA AirNow Package
+============================================
+.. automodule:: epa.airnow_ds_def
    :members:
    :inherited-members: compress
 

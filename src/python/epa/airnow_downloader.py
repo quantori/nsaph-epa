@@ -10,14 +10,16 @@ import os
 import time
 from datetime import timedelta, datetime, date
 from pathlib import Path
-from typing import List, Any, Union
+from typing import List, Any, Union, Dict
 
 import pandas
 import yaml
 from nsaph_utils.qc import Tester
 from nsaph_utils.utils.io_utils import fopen, as_content
 
-from airnow_gis import GISAnnotator
+from epa import add_record_num, MONITOR
+from epa.airnow_ds_def import AirNowContext
+from epa.airnow_gis import GISAnnotator
 
 
 class AirNowDownloader:
@@ -27,6 +29,7 @@ class AirNowDownloader:
     
     SITE = "FullAQSCode"
     VALUE = "Value"
+    MONITOR_FORMAT = "{state}-{fips:05d}-{site}"
     AQI = "AQI"
     GIS_COLUMNS = ["ZIP", "STATE", "GEOID"]
     bbox = "-140.58788,20.634217,-60.119132,60.453505"
@@ -72,8 +75,12 @@ class AirNowDownloader:
             return key
         raise Exception("AirNow API Key was not found")
 
-    def __init__(self, target: str, parameter: str,
-                 api_key: str = None, qc = True):
+    def __init__(self,
+                 target: str = None,
+                 parameter: str = None,
+                 api_key: str = None,
+                 qc = None,
+                 context: AirNowContext = None):
         """
         Constructor.
 
@@ -100,17 +107,29 @@ class AirNowDownloader:
             
         """
 
+        self.record_index = 0
         self.options = dict()
         self.options["bbox"] = self.bbox
         self.options["format"] = self.format_json
         self.options["datatype"] = self.datatype
         self.options["verbose"] = self.verbose
-        self.options["parameters"] = parameter
-        self.target = target
+        if parameter is not None:
+            self.options["parameters"] = parameter
+        else:
+            self.options["parameters"] = context.parameters
+        if target is not None:
+            self.target = target
+        else:
+            self.target = context.destination
+        if api_key is None:
+            api_key = context.api_key
         if api_key is None:
             api_key = self.look_for_api_key()
         self.options["api_key"] = api_key
-        shapes = self.get_config("shapes")
+        if context.shapes:
+            shapes = context.shapes
+        else:
+            shapes = self.get_config("shapes")
         if not shapes:
             raise Exception("Shape files are not specified")
         self.annotator = GISAnnotator(shapes, self.GIS_COLUMNS)
@@ -244,15 +263,34 @@ class AirNowDownloader:
             record = {column: row[column] for column in aggregated.columns}
             site = record[self.SITE]
             record.update(self.sites[site])
+            self.record_index += 1
+            add_record_num(record, self.record_index)
+            self.add_monitor_key(record)
             data.append(record)
         return data
+
+    @classmethod
+    def add_monitor_key(cls, record: Dict):
+        state = record["STATE"]
+        if not state:
+            state = "__"
+        fips5 = record["FIPS5"]
+        if not fips5:
+            fips5 = 0
+        site = record[cls.SITE]
+        if isinstance(site, int):
+            site = "{:09d}".format(site)
+        monitor = cls.MONITOR_FORMAT.format(
+            state = state,
+            fips = int(fips5),
+            site = site)
+        record[MONITOR] = monitor
 
     def do_qc(self, df: pandas.DataFrame):
         src = Path(__file__).parents[1]
         qc = os.path.join(src, "qc", "tests.yaml")
         tester = Tester("AirNow", qc)
         tester.check(df)
-
 
     def check_sites(self, df: pandas.DataFrame):
         sites = df[self.SITE]

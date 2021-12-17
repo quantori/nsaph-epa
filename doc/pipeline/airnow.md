@@ -1,0 +1,54 @@
+# Full Medicaid Processing Pipeline
+**Workflow**
+
+**Source**: [airnow.cwl](../../src/cwl/airnow.cwl)
+
+<!-- toc -->
+
+- [Description](#description)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
+- [Steps](#steps)
+
+<!-- tocstop -->
+
+## Description
+This workflow downloads AirNow data from the government
+servers, introspects it to infer the database schema
+and ingests the data into the database
+
+
+## Inputs
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+|proxy|string|``|HTTP/HTTPS Proxy if required|
+|api-key|string| |API key for AirNow|
+|database|File| |Path to database connection file, usually database.ini|
+|connection_name|string| |The name of the section in the database.ini file|
+|from|string| |Start date for downolading, in YYYY-MM-DD format|
+|to|string| |End date for downolading, in YYYY-MM-DD format|
+|parameter_code|string| |Parameter code. Either a numeric code (e.g. 88101, 44201) or symbolic name (e.g. PM25, NO2). See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list) |
+|table|string| |Name of the table to be created in the database|
+
+## Outputs
+
+| Name | Type | Description |
+|------|------|-------------|
+|setup_log|File| |
+|cfg|File| |
+|download_log|File| |
+|ingest_log|File| |
+|index_log|File| |
+|download_data|File| |
+|model|File| |
+
+## Steps
+
+| Name | Runs | Description |
+|------|------|-------------|
+|setup|[setup_airnow.cwl](setup_airnow.md)| |
+|download|[download_airnow.cwl](download_airnow.md)| |
+|introspect|[introspect.cwl](introspect.md)| |
+|ingest|[ingest.cwl](ingest.md)|Uploads data into the database|
+|index|[index.cwl](index.md)| |

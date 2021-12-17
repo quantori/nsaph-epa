@@ -70,6 +70,7 @@ class AQSContext(Context):
     _destination = Argument("destination",
                            aliases=['dest', 'd'],
                            cardinality=Cardinality.single,
+                           required=False,
                            help="Destination directory for the downloaded files"
                            )
     _merge_years = Argument("merge_years",

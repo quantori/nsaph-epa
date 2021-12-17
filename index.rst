@@ -10,13 +10,14 @@ Welcome to EPA Toolkit's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   usage
-   aqs
-   aqs_ds_def
-   airnow
-   airnow_ds_def
-   aqs_tools
-   airnow_downloader
+   README
+   doc/usage
+   doc/members/aqs
+   doc/members/aqs_ds_def
+   doc/members/airnow
+   doc/members/airnow_ds_def
+   doc/members/aqs_tools
+   doc/members/airnow_downloader
 
 
 Indices and tables

@@ -1,5 +1,5 @@
 Downloader for AirNow
 =====================
 
-.. automodule:: airnow_downloader
+.. automodule:: epa.airnow_downloader
    :members:

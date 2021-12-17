@@ -1,0 +1,15 @@
+{
+    "job": {
+      "database": {
+         "class": "File",
+         "location": "/opt/airflow/project/database.ini"
+      },
+      "connection_name": "nsaph2",
+      "parameter_code": "PM25",
+      "table": "pm25_airnow_test",
+      "api-key": "9B053C38-3C42-416E-A330-203A698CCCDA",
+      "from": "2020-12-25",
+      "to": "2021-01-05",
+      "proxy": "http://rcproxy.rc.fas.harvard.edu:3128"
+    }
+ }

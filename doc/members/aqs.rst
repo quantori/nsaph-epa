@@ -1,5 +1,5 @@
 Main Class for EPA AQS Package
 ==============================
 
-.. automodule:: aqs
+.. automodule:: epa.aqs
    :members:
