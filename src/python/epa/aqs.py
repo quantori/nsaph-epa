@@ -101,16 +101,16 @@ class AQS:
         if not self.download_tasks:
             self.collect_downloads()
         for task in self.download_tasks:
-            if task.is_up_to_date():
-                continue
-            download_data (task)
+            #if task.is_up_to_date():
+            #    continue
+            download_data(task)
 
 
 if __name__ == '__main__':
     downloader = AQS()
     print(downloader.context)
-    print("Up to date: " + str(downloader.is_downloaded()))
+    # print("Up to date: " + str(downloader.is_downloaded()))
     downloader.download()
-    print("Up to date: " + str(downloader.is_downloaded()))
+    # print("Up to date: " + str(downloader.is_downloaded()))
 
 

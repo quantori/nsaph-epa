@@ -32,20 +32,26 @@ Probably the only method useful to external user is :func:`download_aqs_data`
 #
 
 import csv
+import io
 import logging
-from typing import List, Dict
 import os
+import tempfile
+import zipfile
+from subprocess import run
+from typing import List, Dict
 
 from epa import STATE_CODE, COUNTY_CODE, \
     SITE_NUM, PARAMETER_CODE, MONITOR, RECORD, add_record_num
 from epa.aqs_ds_def import AQSContext, Parameter, Aggregation
-from nsaph_utils.utils.io_utils import as_csv_reader, fopen, write_csv, \
+from nsaph_utils.utils.io_utils import fopen, write_csv, \
     DownloadTask
 
 BASE_AQS_EPA_URL = "https://aqs.epa.gov/aqsweb/airdata/"
 ANNUAL_URI = "annual_conc_by_monitor_{year}.zip"
 DAILY_URI = "daily_{parameter}_{year}.zip"
 MONITOR_FORMAT = "{state}{county:03d}-{site:04d}"
+
+log = logging.getLogger(__name__)
 
 
 def transfer(reader: csv.DictReader, writer: csv.DictWriter, flt=None,
@@ -94,6 +100,53 @@ def add_record_key(row: Dict):
     global record_index
     record_index += 1
     add_record_num(row, record_index)
+
+
+def as_csv_reader(url: str):
+    """
+    An utility method to return the CSV content of the URL as CSVReader
+
+    :param url: URL
+    :return: an instance of csv.DictReader
+    """
+    stream = as_stream(url)
+    reader = csv.DictReader(stream, quotechar='"', delimiter=',',
+        quoting=csv.QUOTE_NONNUMERIC, skipinitialspace=True)
+    return reader
+
+
+def as_stream(url: str, extension: str = ".csv", params = None, mode = None):
+    """
+    Returns the content of URL as a stream. In case the content is in zip
+    format (excluding gzip) creates a temporary file
+
+    :param mode: optional parameter to specify desirable mode: text or binary.
+         Possible values: 't' or 'b'
+    :param params: Optional. A dictionary, list of tuples or bytes
+         to send as a query string.
+    :param url: URL
+    :param extension: optional, when the content is zip-encoded, the extension
+        of the zip entry to return
+    :return: Content of the URL or a zip entry
+    """
+    temp = tempfile.NamedTemporaryFile()
+
+    log.info("Download %s to %s", url, temp.name)
+    run(["wget", url, "-O", temp.name], check=True)
+
+    if url.lower().endswith(".zip"):
+        zfile = zipfile.ZipFile(temp)
+        entries = [
+            e for e in zfile.namelist() if e.endswith(extension)
+        ]
+        assert len(entries) == 1
+        stream = io.TextIOWrapper(zfile.open(entries[0]))
+    else:
+        if mode == 't':
+            stream = io.TextIOWrapper(temp.read())
+        else:
+            stream = io.BytesIO(temp.read())
+    return stream
 
 
 def download_data(task: DownloadTask):
