@@ -99,7 +99,4 @@ if __name__ == '__main__':
     ap.add_argument('files', type=str, nargs='+', help='files to parse')
     args = ap.parse_args()
 
-    print("FILES", args.files)
-    print("PARAMETERS", args.parameters)
-
-    expand_data(files=args.files, parameters=args.parameters or [])
+    expand_data(files=args.files, parameters=args.parameters)
