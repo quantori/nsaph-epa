@@ -48,7 +48,24 @@ class Parameter(IntEnum):
 
     @classmethod
     def values(cls):
-        return {p.value for p in Parameter}
+        return {p.value for p in cls}
+
+    @classmethod
+    def validate(cls, value):
+        if value is None:
+            return None
+
+        if isinstance(value, int):
+            return value
+
+        if value.isnumeric():
+            return int(value)
+
+        for p in cls:
+            if value == p.name:
+                return p.value
+
+        raise ValueError("Unknown parameter name")
 
 
 class Aggregation(Enum):

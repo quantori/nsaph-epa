@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-### Downloader of AirNow Data
+### Downloader of AQS Data
 #  Copyright (c) 2021. Harvard University
 #
 #  Developed by Research Software Engineering,
@@ -21,81 +21,36 @@
 
 cwlVersion: v1.2
 class: CommandLineTool
-baseCommand: [python, -m, epa.airnow]
+baseCommand: [python, -m, epa.aqs_expand]
+
 requirements:
   InlineJavascriptRequirement: {}
 
-
 doc: |
-  This tool downloads AirNow data from EPA website
+  This tool downloads AQS data from EPA website
 
-# -p pm25 --dest airnow_pm25.json.gz --from 2020-12-25 --to 2020-12-31 --qc
 inputs:
-  proxy:
-    type: string?
-    default: ""
-    doc: HTTP/HTTPS Proxy if required
+  input:
+    type: File[]
+    inputBinding:
+      position: 1
+    doc: |
+      A path the downloaded data file
   parameter_code:
     type: string
+    inputBinding:
+      prefix: --parameter_code
     doc: |
       Parameter code. Either a numeric code (e.g. 88101, 44201)
       or symbolic name (e.g. PM25, NO2).
       See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list)
-    inputBinding:
-      prefix: --parameters
-  from:
-    type: string
-    doc: Start date for downolading, in YYYY-MM-DD format
-    inputBinding:
-      prefix: --from
-  to:
-    type: string
-    doc: End date for downolading, in YYYY-MM-DD format
-    inputBinding:
-      prefix: --to
-  cfg:
-    type: File
-    inputBinding:
-      prefix: --cfg
-  shapes:
-    type: File[]
-    inputBinding:
-      prefix: --shapes
-    secondaryFiles:
-      - ".xml"
-      - ".iso.xml"
-      - ".ea.iso.xml"
-      - "^.dbf"
-      - "^.sbx"
-      - "^.shx"
-      - "^.sbn"
-      - "^.prj"
-      - "^.cpg"
-  table:
-    type: string
-    doc: the name of the table to be created
-  api-key:
-    type: string?
-    inputBinding:
-      prefix: --api_key
-
-
-arguments:
-    - valueFrom: "--qc"
-    - valueFrom: $(inputs.table + ".json.gz")
-      prefix: --destination
-
 
 outputs:
   log:
-    type: File
+    type: File?
     outputBinding:
       glob: "*.log"
   data:
-    type: File
+    type: File?
     outputBinding:
-      glob: "*.json*"
-
-
-
-
+      glob: "*.csv*"
