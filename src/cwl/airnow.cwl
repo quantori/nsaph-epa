@@ -61,23 +61,18 @@ inputs:
   table:
     doc: Name of the table to be created in the database
     type: string
+  cfg:
+    type: File
+  shapes:
+    type: File[]
 
 steps:
-  setup:
-    run: setup_airnow.cwl
-    in:
-      api-key: api-key
-    out:
-      - cfg
-      - shapes
-      - log
-
   download:
     run: download_airnow.cwl
     in:
       api-key: api-key
-      cfg: setup/cfg
-      shapes: setup/shapes
+      cfg: cfg
+      shapes: shapes
       from: from
       to: to
       table: table
@@ -120,18 +115,9 @@ steps:
 
 
 outputs:
-  setup_log:
-    type: File
-    outputSource: setup/log
   cfg:
     type: File
-    outputSource: setup/cfg
-#  shape_dir:
-#    type: Directory
-#    outputSource: setup/shape_dir
-#  shapes:
-#    type: File[]
-#    outputSource: setup/shapes
+    outputSource: cfg
   download_log:
     type: File
     outputSource: download/log
