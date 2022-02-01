@@ -65,6 +65,16 @@ inputs:
     type: File
   shapes:
     type: File[]
+    secondaryFiles:
+      - ".xml"
+      - ".iso.xml"
+      - ".ea.iso.xml"
+      - "^.dbf"
+      - "^.sbx"
+      - "^.shx"
+      - "^.sbn"
+      - "^.prj"
+      - "^.cpg"
 
 steps:
   download:
@@ -115,9 +125,6 @@ steps:
 
 
 outputs:
-  cfg:
-    type: File
-    outputSource: cfg
   download_log:
     type: File
     outputSource: download/log

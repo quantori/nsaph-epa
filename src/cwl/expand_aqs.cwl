@@ -29,7 +29,6 @@ requirements:
 doc: |
   This tool downloads AQS data from EPA website
 
-# --dest /Users/misha/harvard/projects/epa/aqs -p PM25 -a annual --merge_years
 inputs:
   input:
     type: File[]

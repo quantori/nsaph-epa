@@ -111,7 +111,7 @@ steps:
       table: table
       output:
         valueFrom: epa.yaml
-    out: [log, model]
+    out: [log, model, errors]
 
   ingest:
     run: ingest.cwl
@@ -122,7 +122,7 @@ steps:
       input: expand/data
       database: database
       connection_name: connection_name
-    out: [log]
+    out: [log, errors]
 
   index:
     run: index.cwl
@@ -162,9 +162,6 @@ outputs:
   model:
     type: File
     outputSource: introspect/model
-  download_err:
-    type: File
-    outputSource: download/errors
   introspect_err:
     type: File
     outputSource: introspect/errors
