@@ -72,22 +72,23 @@ class GISAnnotator:
         :param y: A column, containing latitude
         :return: data frame with added annotations
         """
+        if df.empty:
+            return
 
         self.init()
-        actual_n_rows = len(df)
-        if actual_n_rows < 1:
-            return None
         geometry = [Point(xy) for xy in zip(df[x], df[y])]
-        columns = set(self.columns)
+        current_columns = set(self.columns)
         for shapes in self.shapes:
             points = geopandas.GeoDataFrame(df, geometry=geometry, crs=self.crs)
             pts = geopandas.sjoin(points, shapes, how='left')
-            cc = {c for c in pts.columns if c in columns}
-            ccc = list(df.columns) + list(cc)
-            df = geopandas.GeoDataFrame(pts[ccc], geometry=geometry,
-                                            crs=self.crs)
-            columns -= cc
-            if not columns:
+
+            founded_columns = set(pts.columns) & current_columns
+            target_columns = list(df.columns) + list(founded_columns)
+
+            df = geopandas.GeoDataFrame(pts[target_columns], geometry=geometry, crs=self.crs)
+            current_columns -= founded_columns
+
+            if not current_columns:
                 break
         return df
 

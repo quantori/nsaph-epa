@@ -50,7 +50,7 @@ class AirNowDownloader:
     VALUE = "Value"
     MONITOR_FORMAT = "{state}-{fips:05d}-{site}"
     AQI = "AQI"
-    GIS_COLUMNS = ["ZIP", "STATE", "GEOID"]
+    GIS_COLUMNS = ["ZCTA5CE10", "STATEFP", "COUNTYFP"]
     bbox = "-140.58788,20.634217,-60.119132,60.453505"
 
     format_csv = "text/csv"
@@ -160,6 +160,7 @@ class AirNowDownloader:
             self.t_int = [("00", "23:59")]
         else:
             self.t_int = [("00", "11:59"), ("12:00", "23:59")]
+        self._states = dict()
 
     def reset(self):
         if os.path.exists(self.target):
@@ -279,7 +280,7 @@ class AirNowDownloader:
             self.do_qc(df)
         data = []
         for _, row in aggregated.iterrows():
-            record = {column: row[column] for column in aggregated.columns}
+            record = row.to_dict()
             site = record[self.SITE]
             record.update(self.sites[site])
             self.record_index += 1
@@ -328,10 +329,23 @@ class AirNowDownloader:
                 ) else None
                 for key in self.GIS_COLUMNS
             }
+
+            # Postprocess data
             row[self.SITE] = site[self.SITE]
-            fips5 = row["GEOID"]
-            del row["GEOID"]
-            row["FIPS5"] = fips5
+            row["ZCTA"] = row.pop("ZCTA5CE10")
+
+            if row["ZCTA"] is not None:
+                row["COUNTY"] = row["STATEFP"] + row["COUNTYFP"]
+                row["FIPS5"] = row["COUNTY"]
+
+                state = self._get_state_by_fips(row["STATEFP"])
+                row["STUSPS"] = state["STUSPS"]
+                row["STATEISO"] = "US-" + state["STUSPS"]
+                row["STATE"] = row["STATEFP"]
+
+            else:
+                row["COUNTY"] = row["FIPS5"] = row["STUSPS"] = row["STATEISO"] = row["STATE"] = None
+
             self.sites[site[self.SITE]] = row
         return
 
@@ -364,6 +378,20 @@ class AirNowDownloader:
             if elapsed.total_seconds() < 7.2:
                 time.sleep(7.2 - elapsed.total_seconds())
         logging.info("Download complete. Last downloaded date: {}".format(str(dt)))
+
+    def _get_state_by_fips(self, fips: str) -> dict:
+        if not self._states:
+            self._read_states()
+
+        return self._states[fips]
+
+    def _read_states(self):
+        states_filename = os.path.join(os.path.dirname(__file__), "states.csv")
+        with open(states_filename) as csvfile:
+            reader = csv.DictReader(csvfile, delimiter=',')
+
+            for state in reader:
+                self._states[state["STATEFP"]] = state
 
 
 def test():
