@@ -29,7 +29,7 @@ import os
 import time
 from datetime import timedelta, datetime, date
 from pathlib import Path
-from typing import List, Any, Union, Dict
+from typing import List, Union, Dict
 
 import pandas
 import yaml
@@ -50,7 +50,7 @@ class AirNowDownloader:
     VALUE = "Value"
     MONITOR_FORMAT = "{state}-{fips:05d}-{site}"
     AQI = "AQI"
-    GIS_COLUMNS = ["ZCTA5CE10", "STATEFP", "COUNTYFP"]
+    GIS_COLUMNS = ["ZCTA", "STATE", "FIPS5", "STATEFP", "COUNTYFP", "COUNTY", "STUSPS"]
     bbox = "-140.58788,20.634217,-60.119132,60.453505"
 
     format_csv = "text/csv"
@@ -330,22 +330,7 @@ class AirNowDownloader:
                 for key in self.GIS_COLUMNS
             }
 
-            # Postprocess data
             row[self.SITE] = site[self.SITE]
-            row["ZCTA"] = row.pop("ZCTA5CE10")
-
-            if row["ZCTA"] is not None:
-                row["COUNTY"] = row["STATEFP"] + row["COUNTYFP"]
-                row["FIPS5"] = row["COUNTY"]
-
-                state = self._get_state_by_fips(row["STATEFP"])
-                row["STUSPS"] = state["STUSPS"]
-                row["STATEISO"] = "US-" + state["STUSPS"]
-                row["STATE"] = row["STATEFP"]
-
-            else:
-                row["COUNTY"] = row["FIPS5"] = row["STUSPS"] = row["STATEISO"] = row["STATE"] = None
-
             self.sites[site[self.SITE]] = row
         return
 
@@ -378,20 +363,6 @@ class AirNowDownloader:
             if elapsed.total_seconds() < 7.2:
                 time.sleep(7.2 - elapsed.total_seconds())
         logging.info("Download complete. Last downloaded date: {}".format(str(dt)))
-
-    def _get_state_by_fips(self, fips: str) -> dict:
-        if not self._states:
-            self._read_states()
-
-        return self._states[fips]
-
-    def _read_states(self):
-        states_filename = os.path.join(os.path.dirname(__file__), "states.csv")
-        with open(states_filename) as csvfile:
-            reader = csv.DictReader(csvfile, delimiter=',')
-
-            for state in reader:
-                self._states[state["STATEFP"]] = state
 
 
 def test():
