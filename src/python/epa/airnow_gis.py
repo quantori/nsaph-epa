@@ -109,17 +109,14 @@ class GISAnnotator:
             data = geopandas.GeoDataFrame.from_file(filename).to_crs(self.crs)
 
             if "ZIP" in data.columns:
-                print("MATCH ZIP")
                 data.rename(columns={'ZIP': 'ZCTA'}, inplace=True)
                 self.zip_shapes = data
 
             elif "ZCTA5CE10" in data.columns:
-                print("MATCH ZCTA")
                 data.rename(columns={'ZCTA5CE10': 'ZCTA'}, inplace=True)
                 self.zip_shapes = data
 
             elif "STATEFP" in data.columns and "COUNTYFP" in data.columns:
-                print("MATCH COUNTY")
                 self.county_shapes = data
 
     def _add_shape_columns(
