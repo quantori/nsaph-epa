@@ -58,16 +58,6 @@ outputs:
     type: File[]
     outputBinding:
       glob: "shapes/*.shp"
-    secondaryFiles:
-      - ".xml"
-      - ".iso.xml"
-      - ".ea.iso.xml"
-      - "^.dbf"
-      - "^.sbx"
-      - "^.shx"
-      - "^.sbn"
-      - "^.prj"
-      - "^.cpg"
   log:
     type: stdout
 

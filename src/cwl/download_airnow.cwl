@@ -67,13 +67,8 @@ inputs:
     inputBinding:
       prefix: --shapes
     secondaryFiles:
-      - ".xml"
-      - ".iso.xml"
-      - ".ea.iso.xml"
       - "^.dbf"
-      - "^.sbx"
       - "^.shx"
-      - "^.sbn"
       - "^.prj"
       - "^.cpg"
   table:
@@ -83,7 +78,6 @@ inputs:
     type: string?
     inputBinding:
       prefix: --api_key
-
 
 arguments:
     - valueFrom: "--qc"
