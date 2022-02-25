@@ -47,11 +47,12 @@ and ingests the data into the database
 
 ## Steps
 
-| Name | Runs | Description |
-|------|------|-------------|
-|states|[ensure_resource.cwl](ensure_resource.md)|Ensures the presence of `us_states` table in the database. The table contains mapping between state names, ids (two letter abbreviations), FIPS codes and [ISO-3166-2 codes](https://en.wikipedia.org/wiki/ISO_3166-2) |
-|iso|[ensure_resource.cwl](ensure_resource.md)|Ensures the presence of `us_iso` table in the database. The table provides a mapping between states, counties and zip codes. It contains FIPS and [ISO-3166-2 codes](https://en.wikipedia.org/wiki/ISO_3166-2) |
-|download|[download_aqs.cwl](download_aqs.md)| |
-|introspect|[introspect.cwl](introspect.md)| |
-|ingest|[ingest.cwl](ingest.md)|Uploads data into the database|
-|index|[index.cwl](index.md)| |
+| Name       | Runs                                      | Description                                                                                                                                                                                                            |
+|------------|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| states     | [ensure_resource.cwl](ensure_resource.md) | Ensures the presence of `us_states` table in the database. The table contains mapping between state names, ids (two letter abbreviations), FIPS codes and [ISO-3166-2 codes](https://en.wikipedia.org/wiki/ISO_3166-2) |
+| iso        | [ensure_resource.cwl](ensure_resource.md) | Ensures the presence of `us_iso` table in the database. The table provides a mapping between states, counties and zip codes. It contains FIPS and [ISO-3166-2 codes](https://en.wikipedia.org/wiki/ISO_3166-2)         |
+| download   | [download_aqs.cwl](download_aqs.md)       |                                                                                                                                                                                                                        |
+| expand     | [expand_aqs.cwl](expand_aqs.md)           | Adds additional columns to csv                                                                                                                                                                                         |
+| introspect | [introspect.cwl](introspect.md)           |                                                                                                                                                                                                                        |
+| ingest     | [ingest.cwl](ingest.md)                   | Uploads data into the database                                                                                                                                                                                         |
+| index      | [index.cwl](index.md)                     |                                                                                                                                                                                                                        |

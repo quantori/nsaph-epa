@@ -21,7 +21,7 @@
 
 cwlVersion: v1.2
 class: CommandLineTool
-baseCommand: [wget]
+baseCommand: [python, -m, epa.aqs_expand]
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -30,35 +30,27 @@ doc: |
   This tool downloads AQS data from EPA website
 
 inputs:
-  aggregation:
-    type: string
-    doc: "Aggregation type: annual or daily"
+  input:
+    type: File[]
+    inputBinding:
+      position: 1
+    doc: |
+      A path the downloaded data file
   parameter_code:
     type: string
+    inputBinding:
+      prefix: --parameter_code
     doc: |
       Parameter code. Either a numeric code (e.g. 88101, 44201)
       or symbolic name (e.g. PM25, NO2).
       See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list)
-  year:
-    type: string
-    doc: Year to download
-
-arguments:
-  - position: 1
-    valueFrom: |
-      ${
-        if (inputs.aggregation == "annual") {
-            return "https://aqs.epa.gov/aqsweb/airdata/annual_conc_by_monitor_" + inputs.year + ".zip";
-        } else {
-            var parameters = {"NO2": 42602, "OZONE": 44201, "PM25": 88101, "MIN_TEMP": 68103, "MAX_TEMP": 68104};
-            var parameter = parameters[inputs.parameter_code] || inputs.parameter_code;
-
-            return "https://aqs.epa.gov/aqsweb/airdata/daily_" + parameter + "_" + inputs.year + ".zip";
-        }
-      }
 
 outputs:
-  data:
-    type: File
+  log:
+    type: File?
     outputBinding:
-      glob: "*.*"
+      glob: "*.log"
+  data:
+    type: File?
+    outputBinding:
+      glob: "*.csv*"

@@ -26,6 +26,7 @@ requirements:
   SubworkflowFeatureRequirement: {}
   StepInputExpressionRequirement: {}
   InlineJavascriptRequirement: {}
+  ScatterFeatureRequirement: {}
 
 doc: |
   This workflow downloads AQS data from the government
@@ -54,6 +55,9 @@ inputs:
   table:
     doc: Name of the table to be created in the database
     type: string
+  years:
+    type: string[]
+    doc: Years to download
 
 steps:
   states:
@@ -85,17 +89,25 @@ steps:
 
   download:
     run: download_aqs.cwl
+    scatter: year
     in:
+      year: years
       aggregation: aggregation
       parameter_code: parameter_code
-      proxy: proxy
-    out: [log, data, errors]
+    out: [data]
+
+  expand:
+    run: expand_aqs.cwl
+    in:
+      parameter_code: parameter_code
+      input: download/data
+    out: [log, data]
 
   introspect:
     run: introspect.cwl
     in:
-      depends_on: download/log
-      input: download/data
+      depends_on: expand/log
+      input: expand/data
       table: table
       output:
         valueFrom: epa.yaml
@@ -107,7 +119,7 @@ steps:
     in:
       registry: introspect/model
       table: table
-      input: download/data
+      input: expand/data
       database: database
       connection_name: connection_name
     out: [log, errors]
@@ -132,9 +144,9 @@ outputs:
   resource2_log:
     type: File
     outputSource: iso/log
-  download_log:
+  expand_log:
     type: File
-    outputSource: download/log
+    outputSource: expand/log
   introspect_log:
     type: File
     outputSource: introspect/log
@@ -146,13 +158,10 @@ outputs:
     outputSource: index/log
   data:
     type: File
-    outputSource: download/data
+    outputSource: expand/data
   model:
     type: File
     outputSource: introspect/model
-  download_err:
-    type: File
-    outputSource: download/errors
   introspect_err:
     type: File
     outputSource: introspect/errors
