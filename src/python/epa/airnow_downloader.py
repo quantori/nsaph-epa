@@ -29,7 +29,7 @@ import os
 import time
 from datetime import timedelta, datetime, date
 from pathlib import Path
-from typing import List, Any, Union, Dict
+from typing import List, Union, Dict
 
 import pandas
 import yaml
@@ -50,7 +50,7 @@ class AirNowDownloader:
     VALUE = "Value"
     MONITOR_FORMAT = "{state}-{fips:05d}-{site}"
     AQI = "AQI"
-    GIS_COLUMNS = ["ZIP", "STATE", "GEOID"]
+    GIS_COLUMNS = ["ZCTA", "STATE", "FIPS5", "STATEFP", "COUNTYFP", "COUNTY", "STUSPS"]
     bbox = "-140.58788,20.634217,-60.119132,60.453505"
 
     format_csv = "text/csv"
@@ -160,6 +160,7 @@ class AirNowDownloader:
             self.t_int = [("00", "23:59")]
         else:
             self.t_int = [("00", "11:59"), ("12:00", "23:59")]
+        self._states = dict()
 
     def reset(self):
         if os.path.exists(self.target):
@@ -279,7 +280,7 @@ class AirNowDownloader:
             self.do_qc(df)
         data = []
         for _, row in aggregated.iterrows():
-            record = {column: row[column] for column in aggregated.columns}
+            record = row.to_dict()
             site = record[self.SITE]
             record.update(self.sites[site])
             self.record_index += 1
@@ -328,10 +329,8 @@ class AirNowDownloader:
                 ) else None
                 for key in self.GIS_COLUMNS
             }
+
             row[self.SITE] = site[self.SITE]
-            fips5 = row["GEOID"]
-            del row["GEOID"]
-            row["FIPS5"] = fips5
             self.sites[site[self.SITE]] = row
         return
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-### Prepare environment for AirNow
+### Downloader of AirNow Data
 #  Copyright (c) 2021. Harvard University
 #
 #  Developed by Research Software Engineering,
@@ -21,49 +21,42 @@
 
 cwlVersion: v1.2
 class: CommandLineTool
-baseCommand: [python, -m, epa.airnow_setup]
-requirements:
-  InlineJavascriptRequirement: {}
+baseCommand: [python, -m, epa.airnow_shapes]
 
 doc: |
-  This tool prepares environemnt for AirNow download
-  It checks that AirNow API key is provided and installs
-  zip and county shape files if necessary
+  This tool downloads AirNow data from EPA website
 
 inputs:
-  api-key:
+  proxy:
+    type: string?
+    default: ""
+    doc: HTTP/HTTPS Proxy if required
+  parameter_code:
     type: string
+    doc: |
+      Parameter code. Either a numeric code (e.g. 88101, 44201)
+      or symbolic name (e.g. PM25, NO2).
+      See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list)
     inputBinding:
-      position: 1
-  shape_dir:
-    type: Directory?
+      prefix: --parameters
+  from:
+    type: string
+    doc: Start date for downolading, in YYYY-MM-DD format
     inputBinding:
-      position: 2
-  cfg:
-    type: File?
+      prefix: --from
+  to:
+    type: string
+    doc: End date for downolading, in YYYY-MM-DD format
     inputBinding:
-      position: 3
-
+      prefix: --to
 
 outputs:
-  cfg:
-    type: File
-    outputBinding:
-      glob: ".airnow.yaml"
-#  shape_dir:
-#    type: Directory
-#    outputBinding:
-#      glob: "shapes"
   shapes:
     type: File[]
     outputBinding:
-      glob: "shapes/*.shp"
-  log:
-    type: stdout
-
-stdout: setup.log
-
-
-
-
-
+      glob: "*.shp"
+    secondaryFiles:
+      - "^.dbf"
+      - "^.shx"
+      - "^.prj"
+      - "^.cpg"
