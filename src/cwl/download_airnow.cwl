@@ -24,11 +24,6 @@ class: CommandLineTool
 baseCommand: [python, -m, epa.airnow]
 requirements:
   InlineJavascriptRequirement: {}
-  EnvVarRequirement:
-    envDef:
-      HTTP_PROXY: "$('proxy' in inputs? inputs.proxy: null)"
-      HTTPS_PROXY: "$('proxy' in inputs? inputs.proxy: null)"
-      NO_PROXY: "localhost,127.0.0.1,172.17.0.1"
 
 
 doc: |
@@ -67,13 +62,8 @@ inputs:
     inputBinding:
       prefix: --shapes
     secondaryFiles:
-      - ".xml"
-      - ".iso.xml"
-      - ".ea.iso.xml"
       - "^.dbf"
-      - "^.sbx"
       - "^.shx"
-      - "^.sbn"
       - "^.prj"
       - "^.cpg"
   table:
@@ -83,7 +73,6 @@ inputs:
     type: string?
     inputBinding:
       prefix: --api_key
-
 
 arguments:
     - valueFrom: "--qc"

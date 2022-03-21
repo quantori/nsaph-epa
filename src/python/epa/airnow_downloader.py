@@ -29,7 +29,7 @@ import os
 import time
 from datetime import timedelta, datetime, date
 from pathlib import Path
-from typing import List, Any, Union, Dict
+from typing import List, Union, Dict
 
 import pandas
 import yaml
@@ -45,12 +45,13 @@ class AirNowDownloader:
     """
     Main downloader class
     """
-    
+
     SITE = "FullAQSCode"
     VALUE = "Value"
     MONITOR_FORMAT = "{state}-{fips:05d}-{site}"
     AQI = "AQI"
     GIS_COLUMNS = ["ZCTA5CE10", "STATEFP", "COUNTYFP"]
+    GIS_COLUMNS = ["ZCTA", "STATE", "FIPS5", "STATEFP", "COUNTYFP", "COUNTY", "STUSPS"]
     bbox = "-140.58788,20.634217,-60.119132,60.453505"
 
     format_csv = "text/csv"
@@ -118,12 +119,12 @@ class AirNowDownloader:
                 - CO (co)
                 - NO2 (no2)
                 - SO2 (so2)
-           
+
         :param api_key: Optional API Key to use with AirNow api. If not
             specified, then it is searched in a file named `.airnow.yaml`
             or `.airnow.json` first in working directory and then in user's
             home directory
-            
+
         """
 
         self.record_index = 0
@@ -267,7 +268,7 @@ class AirNowDownloader:
         :return: List of dictinaries, where each row is represented as a
             dictionary, with column names serving as keys
         """
-        
+
         df = pandas.read_json(content)
         agg = {
             c: "mean" if c in [self.VALUE, self.AQI]
@@ -332,22 +333,7 @@ class AirNowDownloader:
                 for key in self.GIS_COLUMNS
             }
 
-            # Postprocess data
             row[self.SITE] = site[self.SITE]
-            row["ZCTA"] = row.pop("ZCTA5CE10")
-
-            if row["ZCTA"] is not None:
-                row["COUNTY"] = row["STATEFP"] + row["COUNTYFP"]
-                row["FIPS5"] = row["COUNTY"]
-
-                state = self._get_state_by_fips(row["STATEFP"])
-                row["STUSPS"] = state["STUSPS"]
-                row["STATEISO"] = "US-" + state["STUSPS"]
-                row["STATE"] = row["STATEFP"]
-
-            else:
-                row["COUNTY"] = row["FIPS5"] = row["STUSPS"] = row["STATEISO"] = row["STATE"] = None
-
             self.sites[site[self.SITE]] = row
         return
 

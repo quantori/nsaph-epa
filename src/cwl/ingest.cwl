@@ -81,7 +81,6 @@ arguments:
     - valueFrom: "epa"
       prefix: --domain
 
-
 outputs:
   log:
     type: File

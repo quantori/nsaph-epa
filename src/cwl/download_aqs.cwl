@@ -21,30 +21,17 @@
 
 cwlVersion: v1.2
 class: CommandLineTool
-baseCommand: [python, -m, epa.aqs]
+baseCommand: [wget]
 
 requirements:
   InlineJavascriptRequirement: {}
-  EnvVarRequirement:
-    envDef:
-      HTTP_PROXY: "$('proxy' in inputs? inputs.proxy: null)"
-      HTTPS_PROXY: "$('proxy' in inputs? inputs.proxy: null)"
-      NO_PROXY: "localhost,127.0.0.1,172.17.0.1"
-
 
 doc: |
   This tool downloads AQS data from EPA website
 
-# --dest /Users/misha/harvard/projects/epa/aqs -p PM25 -a annual --merge_years
 inputs:
-  proxy:
-    type: string?
-    default: ""
-    doc: HTTP/HTTPS Proxy if required
   aggregation:
     type: string
-    inputBinding:
-      prefix: --aggregation
     doc: "Aggregation type: annual or daily"
   parameter_code:
     type: string
@@ -52,27 +39,26 @@ inputs:
       Parameter code. Either a numeric code (e.g. 88101, 44201)
       or symbolic name (e.g. PM25, NO2).
       See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list)
-    inputBinding:
-      prefix: --parameters
+  year:
+    type: string
+    doc: Year to download
 
 arguments:
-    - valueFrom: "--merge_years"
+  - position: 1
+    valueFrom: |
+      ${
+        if (inputs.aggregation == "annual") {
+            return "https://aqs.epa.gov/aqsweb/airdata/annual_conc_by_monitor_" + inputs.year + ".zip";
+        } else {
+            var parameters = {"NO2": 42602, "OZONE": 44201, "PM25": 88101, "MIN_TEMP": 68103, "MAX_TEMP": 68104};
+            var parameter = parameters[inputs.parameter_code] || inputs.parameter_code;
 
+            return "https://aqs.epa.gov/aqsweb/airdata/daily_" + parameter + "_" + inputs.year + ".zip";
+        }
+      }
 
 outputs:
-  log:
-    type: File?
-    outputBinding:
-      glob: "*.log"
   data:
-    type: File?
+    type: File
     outputBinding:
-      glob: "*.csv*"
-  errors:
-    type: stderr
-
-stderr: download.err
-
-
-
-
+      glob: "*.*"

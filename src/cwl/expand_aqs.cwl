@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-### Prepare environment for AirNow
+### Downloader of AQS Data
 #  Copyright (c) 2021. Harvard University
 #
 #  Developed by Research Software Engineering,
@@ -21,49 +21,36 @@
 
 cwlVersion: v1.2
 class: CommandLineTool
-baseCommand: [python, -m, epa.airnow_setup]
+baseCommand: [python, -m, epa.aqs_expand]
+
 requirements:
   InlineJavascriptRequirement: {}
 
 doc: |
-  This tool prepares environemnt for AirNow download
-  It checks that AirNow API key is provided and installs
-  zip and county shape files if necessary
+  This tool downloads AQS data from EPA website
 
 inputs:
-  api-key:
-    type: string
+  input:
+    type: File[]
     inputBinding:
       position: 1
-  shape_dir:
-    type: Directory?
+    doc: |
+      A path the downloaded data file
+  parameter_code:
+    type: string
     inputBinding:
-      position: 2
-  cfg:
-    type: File?
-    inputBinding:
-      position: 3
-
+      prefix: --parameter_code
+    doc: |
+      Parameter code. Either a numeric code (e.g. 88101, 44201)
+      or symbolic name (e.g. PM25, NO2).
+      See more: [AQS Code List](https://www.epa.gov/aqs/aqs-code-list)
 
 outputs:
-  cfg:
-    type: File
-    outputBinding:
-      glob: ".airnow.yaml"
-#  shape_dir:
-#    type: Directory
-#    outputBinding:
-#      glob: "shapes"
-  shapes:
-    type: File[]
-    outputBinding:
-      glob: "shapes/*.shp"
   log:
-    type: stdout
-
-stdout: setup.log
-
-
-
-
-
+    type: File?
+    outputBinding:
+      glob: "*.log"
+  data:
+    type: File?
+    outputBinding:
+      glob: "*.csv*"

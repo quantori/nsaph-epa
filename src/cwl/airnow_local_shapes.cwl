@@ -63,23 +63,21 @@ inputs:
     type: string
   cfg:
     type: File
+  shapes:
+    type: File[]
+    secondaryFiles:
+      - "^.dbf"
+      - "^.shx"
+      - "^.prj"
+      - "^.cpg"
 
 steps:
-  get_shapes:
-    run: get_shapes.cwl
-    in:
-      from: from
-      to: to
-      parameter_code: parameter_code
-      proxy: proxy
-    out: [shapes]
-
   download:
     run: download_airnow.cwl
     in:
       api-key: api-key
       cfg: cfg
-      shapes: get_shapes/shapes
+      shapes: shapes
       from: from
       to: to
       table: table
@@ -122,9 +120,6 @@ steps:
 
 
 outputs:
-  shapes_data:
-    type: File[]
-    outputSource: get_shapes/shapes
   download_log:
     type: File
     outputSource: download/log
