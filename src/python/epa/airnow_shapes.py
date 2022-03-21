@@ -11,7 +11,7 @@ than AQS
 #
 #  Developed by Research Software Engineering,
 #  Faculty of Arts and Sciences, Research Computing (FAS RC)
-#  Author: Michael A Bouzinier
+#  Author: Quantori LLC
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ than AQS
 from datetime import datetime
 
 from epa.airnow_ds_def import AirNowContext
-from epa.airnow_gis import GISDownloader
+from nsaph_gis.downloader import GISDownloader
 
 
 def download_shapes():

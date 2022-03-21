@@ -33,7 +33,8 @@ setup(
         'requests',
         'PyYAML',
         'nsaph_utils >= 0.0.4.2',
-        'nsaph>=0.0.2.0'
+        'nsaph>=0.0.2.0',
+        'git+https://github.com/NSAPH-Data-Platform/nsaph-gis@develop#egg=nsaph-gis',
     ],
     package_data = {
         '': ["**/*.yaml"]
