@@ -33,19 +33,19 @@ from typing import List, Union, Dict
 
 import pandas
 import yaml
-from nsaph_utils.qc import Tester
-from nsaph_utils.utils.io_utils import fopen, as_content
 
 from epa import add_record_num, MONITOR
 from epa.airnow_ds_def import AirNowContext
-from epa.airnow_gis import GISAnnotator
+from nsaph_gis.annotator import GISAnnotator
+from nsaph_utils.qc import Tester
+from nsaph_utils.utils.io_utils import fopen, as_content
 
 
 class AirNowDownloader:
     """
     Main downloader class
     """
-    
+
     SITE = "FullAQSCode"
     VALUE = "Value"
     MONITOR_FORMAT = "{state}-{fips:05d}-{site}"
@@ -118,12 +118,12 @@ class AirNowDownloader:
                 - CO (co)
                 - NO2 (no2)
                 - SO2 (so2)
-           
+
         :param api_key: Optional API Key to use with AirNow api. If not
             specified, then it is searched in a file named `.airnow.yaml`
             or `.airnow.json` first in working directory and then in user's
             home directory
-            
+
         """
 
         self.record_index = 0
@@ -267,7 +267,7 @@ class AirNowDownloader:
         :return: List of dictinaries, where each row is represented as a
             dictionary, with column names serving as keys
         """
-        
+
         df = pandas.read_json(content)
         agg = {
             c: "mean" if c in [self.VALUE, self.AQI]
