@@ -50,7 +50,6 @@ class AirNowDownloader:
     VALUE = "Value"
     MONITOR_FORMAT = "{state}-{fips:05d}-{site}"
     AQI = "AQI"
-    GIS_COLUMNS = ["ZCTA5CE10", "STATEFP", "COUNTYFP"]
     GIS_COLUMNS = ["ZCTA", "STATE", "FIPS5", "STATEFP", "COUNTYFP", "COUNTY", "STUSPS"]
     bbox = "-140.58788,20.634217,-60.119132,60.453505"
 
@@ -283,8 +282,6 @@ class AirNowDownloader:
         for _, row in aggregated.iterrows():
             record = row.to_dict()
             site = record[self.SITE]
-            if site not in self.sites:
-                continue
             record.update(self.sites[site])
             self.record_index += 1
             add_record_num(record, self.record_index)
@@ -366,20 +363,6 @@ class AirNowDownloader:
             if elapsed.total_seconds() < 7.2:
                 time.sleep(7.2 - elapsed.total_seconds())
         logging.info("Download complete. Last downloaded date: {}".format(str(dt)))
-
-    def _get_state_by_fips(self, fips: str) -> dict:
-        if not self._states:
-            self._read_states()
-
-        return self._states[fips]
-
-    def _read_states(self):
-        states_filename = os.path.join(os.path.dirname(__file__), "states.csv")
-        with open(states_filename) as csvfile:
-            reader = csv.DictReader(csvfile, delimiter=',')
-
-            for state in reader:
-                self._states[state["STATEFP"]] = state
 
 
 def test():
