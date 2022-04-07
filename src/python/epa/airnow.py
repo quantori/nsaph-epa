@@ -26,11 +26,9 @@ than AQS
 #  limitations under the License.
 #
 
-import os
-
 import logging
+import os
 from datetime import datetime
-import fiona
 
 from epa.airnow_downloader import AirNowDownloader
 from epa.airnow_ds_def import AirNowContext
@@ -56,6 +54,7 @@ class AirNow:
         self.start = datetime.strptime(context.start_date, "%Y-%m-%d").date()
         self.end = datetime.strptime(context.end_date, "%Y-%m-%d").date()
         self.downloader = AirNowDownloader(context=self.context)
+
     def download(self):
         if self.context.reset:
             self.downloader.reset()
