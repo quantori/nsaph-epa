@@ -39,21 +39,8 @@ inputs:
     type: Directory?
     inputBinding:
       position: 2
-  cfg:
-    type: File?
-    inputBinding:
-      position: 3
-
 
 outputs:
-  cfg:
-    type: File
-    outputBinding:
-      glob: ".airnow.yaml"
-#  shape_dir:
-#    type: Directory
-#    outputBinding:
-#      glob: "shapes"
   shapes:
     type: File[]
     outputBinding:
@@ -62,8 +49,3 @@ outputs:
     type: stdout
 
 stdout: setup.log
-
-
-
-
-
