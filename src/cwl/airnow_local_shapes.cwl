@@ -61,8 +61,6 @@ inputs:
   table:
     doc: Name of the table to be created in the database
     type: string
-  cfg:
-    type: File
   shapes:
     type: File[]
     secondaryFiles:
@@ -76,7 +74,6 @@ steps:
     run: download_airnow.cwl
     in:
       api-key: api-key
-      cfg: cfg
       shapes: shapes
       from: from
       to: to
@@ -117,7 +114,6 @@ steps:
       database: database
       connection_name: connection_name
     out: [log]
-
 
 outputs:
   download_log:

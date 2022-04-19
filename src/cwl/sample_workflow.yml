@@ -1,0 +1,9 @@
+database:
+  path: /opt/airflow/dags/epa/database.ini
+  class: File
+connection_name: nsaph
+api-key: xxx
+parameter_code: pm25
+table: airnow_pm25
+from: 2018-01-01
+to: 2018-01-02

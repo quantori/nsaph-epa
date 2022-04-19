@@ -53,10 +53,6 @@ inputs:
     doc: End date for downolading, in YYYY-MM-DD format
     inputBinding:
       prefix: --to
-  cfg:
-    type: File
-    inputBinding:
-      prefix: --cfg
   shapes:
     type: File[]
     inputBinding:
@@ -89,7 +85,3 @@ outputs:
     type: File
     outputBinding:
       glob: "*.json*"
-
-
-
-
