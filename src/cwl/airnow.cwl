@@ -31,6 +31,8 @@ doc: |
   This workflow downloads AirNow data from the government
   servers, introspects it to infer the database schema
   and ingests the data into the database
+  Example run:
+  cwl-runner airnow.cwl sample_airnow.yml
 
 inputs:
   proxy:
