@@ -32,6 +32,8 @@ doc: |
   This workflow downloads AQS data from the government
   servers, introspects it to infer the database schema
   and ingests the data into the database
+  Example run:
+  cwl-runner aqs.cwl sample_aqs.yml
 
 inputs:
   proxy:
