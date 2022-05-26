@@ -110,6 +110,10 @@ class AirNowContext(Context):
                         help = "AirNow API Key",
                         required=False
     )
+    _proxy = Argument("proxy",
+                        help = "Proxy for external connections, i.e. https://1.1.1.1:3128 ",
+                        required=False
+    )
 
     def __init__(self, doc = None):
         """
@@ -136,6 +140,8 @@ class AirNowContext(Context):
         ''' Optional path to shapes directory '''
         self.api_key = None
         ''' AirNow API Key '''
+        self.proxy = None
+        ''' Proxy address '''
         super().__init__(AirNowContext, doc)
         self.instantiate()
 
@@ -143,8 +149,3 @@ class AirNowContext(Context):
         if attr == "parameters" and value is not None:
             value = [v.lower() for v in value]
         return super().validate(attr, value)
-
-
-
-
-

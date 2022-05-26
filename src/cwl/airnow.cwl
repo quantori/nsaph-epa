@@ -119,6 +119,7 @@ steps:
       connection_name: connection_name
     out: [log]
 
+
 outputs:
   shapes_data:
     type: File[]

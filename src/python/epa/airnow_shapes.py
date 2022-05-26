@@ -34,9 +34,10 @@ from nsaph_gis.downloader import GISDownloader
 
 def download_shapes():
     context = AirNowContext(__doc__)
-    start = datetime.strptime(context.start_date, "%Y-%m-%d")
+    downloader = GISDownloader(proxy=context.proxy)
 
-    GISDownloader.download_shapes(start.year)
+    start = datetime.strptime(context.start_date, "%Y-%m-%d")
+    downloader.download_shapes(start.year)
 
 
 if __name__ == '__main__':
