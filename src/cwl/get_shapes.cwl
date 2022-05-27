@@ -31,6 +31,8 @@ inputs:
     type: string?
     default: ""
     doc: HTTP/HTTPS Proxy if required
+    inputBinding:
+      prefix: --proxy
   parameter_code:
     type: string
     doc: |
