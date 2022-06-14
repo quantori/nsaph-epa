@@ -3,13 +3,13 @@
 
 **Source**: [introspect.cwl](../../src/cwl/introspect.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool examines a directory with downlaoded

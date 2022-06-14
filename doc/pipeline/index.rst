@@ -1,0 +1,4 @@
+Index Builder
+=====================================
+
+.. cwldirective:: index

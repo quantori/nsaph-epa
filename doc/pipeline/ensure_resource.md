@@ -3,13 +3,13 @@
 
 **Source**: [ensure_resource.cwl](../../src/cwl/ensure_resource.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool ensures that resources required by

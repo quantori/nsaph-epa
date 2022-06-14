@@ -3,13 +3,13 @@
 
 **Source**: [index.cwl](../../src/cwl/index.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool builds all indices for the specified table.

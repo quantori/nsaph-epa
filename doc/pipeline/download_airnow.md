@@ -3,13 +3,13 @@
 
 **Source**: [download_airnow.cwl](../../src/cwl/download_airnow.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool downloads AirNow data from EPA website

@@ -18,7 +18,18 @@ Welcome to EPA Toolkit's documentation!
    doc/members/airnow_ds_def
    doc/members/aqs_tools
    doc/members/airnow_downloader
-
+   doc/pipeline/airnow
+   doc/pipeline/airnow_local_shapes
+   doc/pipeline/aqs
+   doc/pipeline/download_airnow
+   doc/pipeline/download_aqs
+   doc/pipeline/ensure_resource
+   doc/pipeline/expand_aqs
+   doc/pipeline/get_shapes
+   doc/pipeline/index
+   doc/pipeline/ingest
+   doc/pipeline/introspect
+   doc/pipeline/setup_airnow
 
 Indices and tables
 ==================

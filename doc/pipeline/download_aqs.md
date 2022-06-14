@@ -3,13 +3,13 @@
 
 **Source**: [download_aqs.cwl](../../src/cwl/download_aqs.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool downloads AQS data from EPA website

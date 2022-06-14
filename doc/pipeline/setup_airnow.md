@@ -3,13 +3,13 @@
 
 **Source**: [setup_airnow.cwl](../../src/cwl/setup_airnow.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool prepares environemnt for AirNow download

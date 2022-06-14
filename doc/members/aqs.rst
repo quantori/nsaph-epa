@@ -1,5 +1,5 @@
 Main Class for EPA AQS Package
 ==============================
 
-.. automodule:: epa.aqs
+.. automodule:: python.epa.aqs
    :members:

@@ -3,14 +3,14 @@
 
 **Source**: [aqs.cwl](../../src/cwl/aqs.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 - [Steps](#steps)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This workflow downloads AQS data from the government

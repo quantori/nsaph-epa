@@ -1,11 +1,11 @@
 # EPA Toolkit Usage
 
-<!-- toc -->
+<!--TOC-->
 
 - [AQS Usage](#aqs-usage)
 - [AirNow Usage](#airnow-usage)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## AQS Usage       
     python -m epa.aqs [-h] 

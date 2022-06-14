@@ -3,13 +3,13 @@
 
 **Source**: [expand_aqs.cwl](../../src/cwl/expand_aqs.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool adds additional columns (i.e. record id) to AQS data
