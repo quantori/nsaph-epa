@@ -145,7 +145,6 @@ class AirNowDownloader:
         if api_key is None:
             api_key = self.look_for_api_key()
         self.options["api_key"] = api_key
-        self.proxy = context.proxy
         if context.shapes:
             shapes = context.shapes
         else:
@@ -173,7 +172,7 @@ class AirNowDownloader:
         content = None
         while True:
             try:
-                content = as_content(self.url, params=options, mode='t', proxy=self.proxy)
+                content = as_content(self.url, params=options, mode='t')
                 break
             except Exception as x:
                 attempts += 1

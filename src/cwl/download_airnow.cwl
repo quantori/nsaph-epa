@@ -24,7 +24,10 @@ class: CommandLineTool
 baseCommand: [python, -m, epa.airnow]
 requirements:
   InlineJavascriptRequirement: {}
-
+  EnvVarRequirement:
+    envDef:
+      HTTPS_PROXY: $(inputs.proxy)
+      HTTP_PROXY: $(inputs.proxy)
 
 doc: |
   This tool downloads AirNow data from EPA website
@@ -35,8 +38,6 @@ inputs:
     type: string?
     default: ""
     doc: HTTP/HTTPS Proxy if required
-    inputBinding:
-      prefix: --proxy
   parameter_code:
     type: string
     doc: |
