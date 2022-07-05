@@ -3,14 +3,14 @@
 
 **Source**: [airnow.cwl](../../src/cwl/airnow.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 - [Steps](#steps)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This workflow downloads AirNow data from the government

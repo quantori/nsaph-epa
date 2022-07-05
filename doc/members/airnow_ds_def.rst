@@ -1,6 +1,6 @@
 Configuration Options for EPA AirNow Package
 ============================================
-.. automodule:: epa.airnow_ds_def
+.. automodule:: python.epa.airnow_ds_def
    :members:
    :inherited-members: compress
 

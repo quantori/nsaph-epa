@@ -1,5 +1,5 @@
 Main Class for EPA AirNow Package
 =================================
 
-.. automodule:: epa.airnow
+.. automodule:: python.epa.airnow
    :members:

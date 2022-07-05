@@ -3,13 +3,13 @@
 
 **Source**: [ingest.cwl](../../src/cwl/ingest.cwl)
 
-<!-- toc -->
+<!--TOC-->
 
 - [Description](#description)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Description
 This tool uploads the data to the database

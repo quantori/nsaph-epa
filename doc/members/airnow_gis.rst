@@ -4,7 +4,7 @@
 The airnow_gis Module
 ============================================================================
 
-.. automodule:: epa.airnow_gis
+.. automodule:: python.epa.airnow_gis
    :members:
    :undoc-members:
 

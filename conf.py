@@ -13,8 +13,9 @@
 import os
 import sys
 from nsaph_utils.docutils.codeurl import URLDomain
+import sphinx
 
-sys.path.insert(0, os.path.abspath('src/python'))
+sys.path.insert(0, os.path.abspath('src/'))
 add_module_names = False
 autoclass_content = 'both'
 autodoc_member_order = 'bysource'
@@ -44,7 +45,9 @@ extensions = [
     'sphinx_paramlinks',
     'sphinx.ext.autosectionlabel',
     'recommonmark',
-    'sphinx_markdown_tables'
+    'sphinx_markdown_tables',
+    'nsaph_utils.docutils.cwl_parser',
+    'nsaph_utils.docutils.cwl_directive'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -68,6 +71,13 @@ html_theme = "sphinx_rtd_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'restructuredtext',
+    '.cwl': 'cwl',
+}
 
 
 def setup(app):
