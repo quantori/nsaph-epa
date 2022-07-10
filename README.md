@@ -1,5 +1,7 @@
+NSAPH EPA Package Description
+=============================
+
 Toolkit for downloading and preprocessing of data provided by EPA
-=================================================================
 
 Handles the following types of data: 
 

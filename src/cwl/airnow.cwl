@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-### Full Medicaid Processing Pipeline
+### Full EPA AirNow Processing Pipeline (including downloading shapefiles)
 #  Copyright (c) 2021. Harvard University
 #
 #  Developed by Research Software Engineering,

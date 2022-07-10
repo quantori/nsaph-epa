@@ -4,7 +4,7 @@
 The airnow_setup Module
 ============================================================================
 
-.. automodule:: python.epa.airnow_setup
+.. automodule:: epa.airnow_setup
    :members:
    :undoc-members:
 

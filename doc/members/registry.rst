@@ -4,7 +4,7 @@
 The registry Module
 ============================================================================
 
-.. automodule:: python.epa.registry
+.. automodule:: epa.registry
    :members:
    :undoc-members:
 
