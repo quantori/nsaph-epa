@@ -46,6 +46,7 @@ extensions = [
     'sphinx.ext.autosectionlabel',
     'nsaph_utils.docutils.recommonmark',
     'sphinx_markdown_tables',
+    'sphinx_sql.sphinx_sql',
     'nsaph_utils.docutils.cwl_parser',
     'nsaph_utils.docutils.cwl_directive'
 ]
