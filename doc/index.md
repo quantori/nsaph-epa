@@ -16,32 +16,12 @@ Handles the following types of data:
 ## Package Contents
 
 ```{toctree}
----
-maxdepth: 4
-caption: General Description
----
 usage
-```
-
-```{toctree}
----
-maxdepth: 2
-caption: Python Components
-glob:
----
-members/*
-```
-
-```{toctree}
----
-maxdepth: 2
-caption: CWL Tools and Common Workflows
-glob:
----
-pipeline/*
+python_components
+cwl_tools
 ```
 
 ## Indices and tables
 
-* :ref:`genindex`
-* :ref:`modindex`
+* [](genindex)
+* [](modindex)
