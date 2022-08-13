@@ -13,6 +13,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('../src/python'))
+sys.path.insert(0, os.path.abspath('../../nsaph-core-platform/src/python'))
+
 add_module_names = False
 autoclass_content = 'both'
 autodoc_member_order = 'bysource'

@@ -1,6 +1,6 @@
 # NSAPH EPA Package Description
 
-[Documentation Home](platform-docs:home)
+[Documentation Home](https://nsaph-data-platform.github.io/nsaph-platform-docs/home.html)
 
 Toolkit for downloading and preprocessing of data provided by EPA
 
