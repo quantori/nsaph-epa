@@ -1,5 +1,7 @@
 Main Class for EPA AQS Package
 ==============================
 
-.. automodule:: python.epa.aqs
+.. automodule:: epa.aqs
    :members:
+   :undoc-members:
+

@@ -1,6 +1,6 @@
 Configuration Options for EPA AQS Package
 =========================================
-.. automodule:: python.epa.aqs_ds_def
+.. automodule:: epa.aqs_ds_def
    :members:
    :inherited-members: years, compress
 

@@ -1,13 +1,14 @@
 # EPA Toolkit Usage
 
-<!--TOC-->
+```{contents}
+---
+local:
+---
+```
 
-- [AQS Usage](#aqs-usage)
-- [AirNow Usage](#airnow-usage)
+## AQS Usage   
 
-<!--TOC-->
-
-## AQS Usage       
+```
     python -m epa.aqs [-h] 
         [--years [YEARS ...]] 
         [--aggregation {annual,daily}] 
@@ -36,9 +37,11 @@
                             Destination directory for the downloaded files
       --merge_years         Concatenate consecutive years in one file, default:
                             False
-     
+```
+
 ## AirNow Usage
 
+```
     python -m epa.airnow  
        [-h] --parameters
        {no2,ozone,pm25,pm10,co,so2,NO2,OZONE,PM25,PM10,CO,SO2}
@@ -72,3 +75,4 @@
                             [1992,1993,1994,1995,1998,1999,2011,2015,2016,2017] ,
                             default: 1990:2020
       --compress, -c        Use gzip compression for the result, default: True
+```
