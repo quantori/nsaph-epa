@@ -43,7 +43,7 @@ from nsaph_utils.utils.io_utils import fopen, as_content
 
 class AirNowDownloader:
     """
-    Main downloader class
+    Main class to download AirNow data
     """
 
     SITE = "FullAQSCode"

@@ -21,7 +21,7 @@ python_components
 cwl_tools
 ```
 
-## Indices and tables
+## Indices {#epa-indices}
 
 * [](genindex)
 * [](modindex)

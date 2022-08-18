@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-### Downloader of AirNow Data
+### Tool retrieving county or zip shapefiles from Census website
 #  Copyright (c) 2021. Harvard University
 #
 #  Developed by Research Software Engineering,
