@@ -45,8 +45,6 @@ extensions = [
     'sphinx_paramlinks',
     'sphinx.ext.autosectionlabel',
     'myst_parser',
-    'nsaph_utils.docutils.cwl_parser',
-    'nsaph_utils.docutils.cwl_directive'
 ]
 myst_heading_anchors = 5
 
